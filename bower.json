@@ -1,0 +1,14 @@
+{
+  "name": "gamification-visualization-webcomponent",
+  "version": "0.0.1",
+  "homepage": "https://github.com/rwth-acis/Gamification-Visualization-WebComponent",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  }
+}

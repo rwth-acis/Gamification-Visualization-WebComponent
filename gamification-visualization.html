@@ -1,0 +1,32 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<dom-module id="gamification-visualization">
+    <template>
+        <style>
+            /* shadow DOM styles */
+            :host {
+                display: inline-block;
+            }
+        </style>
+
+        <!-- shadow DOM -->
+        <p>Backend-URL: [[backendurl]]</p>
+    </template>
+    <script>
+        class GamificationVisualization extends Polymer.Element {
+            static get is() {
+                return "gamification-visualization";
+            }
+            static get properties() {
+                return {
+                    backendurl: {
+                        type: String
+                    }
+                }
+            }
+            constructor() {
+                super();
+            }
+        }
+        customElements.define(GamificationVisualization.is, GamificationVisualization);
+    </script>
+</dom-module>
