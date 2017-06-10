@@ -14,5 +14,5 @@ Import the Component in your sourcecode and add the following DOM-element:
 <gamification-visualization backendurl="example.org"></gamification-visualization>
 ```
 
-The attribute backendurl should contain the url of your Gamification-Framework backend server.
+The attribute "backendurl" should contain the url of your Gamification-Framework backend server.
 (See https://github.com/rwth-acis/Gamification-Framework)
