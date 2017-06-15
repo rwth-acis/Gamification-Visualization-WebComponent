@@ -6,347 +6,65 @@
         <style>
             /* shadow DOM styles */
             :host {
-                display: inline-block;
+                font-family: sans-serif;
             }
 
-            #vistabs {
-
+            #gamificationNavigation {
+                width: 140px;
             }
+
+            #gamificationNavigation a {
+
+                display: block;
+                float: left;
+
+                margin: 3px 10px;
+                padding: 12px;
+                width: 130px;
+
+                border: 2px solid #102279;
+                border-radius: 5px;
+
+                text-align: center;
+                font-size: 13pt;
+                color: black;
+            }
+
+            #gamificationNavigation a:hover {
+
+                text-decoration: none;
+                font-weight: bold;
+                background-color: #f0f0f0;
+            }
+
+            .gamificationTab {
+                display: none;
+            }
+
         </style>
         <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
         <link href="css/vis.css" rel="stylesheet">
 
         <!-- shadow DOM -->
-        <p>Backend-URL: [[backendurl]]</p>
 
-        <div id="container-text">
-
-            <h3>
-                You are not authenticated, try to login using Open ID Learning Layers.
-            </h3>
-            <!--   <button id="refreshbutton" type="button" class="btn btn-info pull-right"> <span class=" glyphicon glyphicon-refresh"></button> -->
+        <nav id="gamificationNavigation">
+            <a id="showTab1" on-click="showTab">Overview</a>
+            <a id="showTab2" on-click="showTab">Badges</a>
+            <a id="showTab3" on-click="showTab">Quests</a>
+            <a id="showTab4" on-click="showTab">Leaderboard</a>
+        </nav>
+        <div id="gamificationTab1"  class="gamificationTab">
+            <h1>Hallo</h1>
+            <p>Backend-URL: [[backendurl]]</p>
         </div>
-        <div class="row-offcanvas row-offcanvas-left" id="vis-container">
-            <div id="sidebar" class="sidebar-offcanvas">
-                <div class="col-md-12" >
-                    <ul id="vistabs" class="nav nav-pills nav-stacked">
-                        <li class="active"><a on-click="showHomeTab" data-toggle="tab" href="#vishome" class="text-center" title="Home"><img src="img/home.png" alt="Home" height="23" /></a></li>
-                        <li><a on-click="showBadgeTab" href="#visbadge" class="text-center" title="Badge"><img src="img/badge.png" alt="Badge" height="23" /></a></li>
-                        <li><a on-click="showAchievementTab" href="#visachievement" class="text-center" title="Achievement"><img src="img/achievement.png" alt="Achievement" height="23" /></a></li>
-                        <li><a on-click="showQuestTab" href="#visquest" class="text-center" title="Quest"><img src="img/quest.png" alt="Quest" height="23" /></a></li>
-                        <li><a on-click="showLocalLeaderboardTab" href="#vislocalleaderboard" class="text-center" title="Local leaderboard"><img src="img/localLeaderboard.png" alt="Local Leaderboard" height="23" /></a></li>
-                        <li><a on-click="showGlobalLeaderboardTab" href="#visgloballeaderboard" class="text-center" title="Global leaderboard"><img src="img/globalLeaderboard.png" alt="Global Leaderboard" height="23" /></a></li>
-
-                        <li><a id="refreshbutton" class="text-center"><img src="img/refresh.png" alt="Refresh" height="13" /></span></a></li>
-                    </ul>
-                </div>
-            </div>
-            <div id="main" class="tab-content">
-                <div class="col-md-12">
-                    <p class="visible-xs">
-                        <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                    </p>
-                </div>
-                <!-- HOME -->
-                <div class="tab-pane active" id="vishome">
-
-                    <script id="memberStatusTemplate" type="text/template">
-                        <h3>Hi <b><%= userName%>!</b></h3>
-                        <br><br>
-                        <div class="form-group text-center">
-                            <h4><b><%= gameIdText%></b></h4>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 text-center">
-                                <h3>Point</h3>
-                                <span class="fa-stack fa-3x text-info">
-                          <i class="fa fa-calendar-o fa-stack-2x text-info"></i>
-                            <span class="fa fa-stack-1x">
-                                <span style="font-family:arial;font-size:30px; margin-top:10px; display:block;">
-                                    <%= memberPoint%>
-                                </span>
-                          </span>
-                      </span>
-                                <h4><%= pointUnitName%></h4>
-                            </div>
-                            <div class="col-sm-4 text-center">
-                                <h2>Level</h2>
-                                <div class="circleStatusProgress" id="memberStatusProgress">
-                                    <h3 class="levelstatus text-info">
-                                        <%= memberLevel%>
-                                    </h3>
-                                    <!-- <img src="https://robohash.org/roboavatar.png" alt="avatar" class="avatar"> -->
-                                    <span class="label">
-                             <%= progress%> %
-                          </span>
-                                </div>
-                                <h4><%= memberLevelName%></h4>
-                            </div>
-                            <div class="col-sm-4 text-center">
-                                <h3>Rank</h3>
-                                <span class="fa-stack fa-3x text-info">
-                          <i class="fa fa-trophy fa-stack-2x"></i>
-                          <span class="fa fa-stack-1x">
-                              <span style="font-family:arial;font-size:30px; margin-top:-15px; display:block; color:white;">
-                                  <%= rank%>
-                              </span>
-                          </span>
-                      </span>
-                            </div>
-                        </div>
-                    </script>
-
-                    <div class="container" id="user-main-status">
-                    </div>
-
-
-                </div>
-                <!-- END HOME -->
-                <!-- BADGE -->
-                <div class="tab-pane" id="visbadge">
-                    <script id="badgeTemplate" type="text/template">
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="<%= getBadgeImage(id) %>" width="100" height="100" class="img-responsive img-circle" alt="Generic placeholder thumbnail">
-                            <!-- </a> -->
-                            <h4><%= name%></h4>
-                            <span class="text-muted"><%= description%></span>
-                        </div>
-                    </script>
-
-                    <h3 class="page-header">Your Badges</h3>
-                    <div class="row placeholders" id="badge-row-container">
-
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-3 placeholder">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
-                            <h4>Label</h4>
-                            <span class="text-muted">Something else</span>
-                        </div>
-
-
-
-                    </div>
-
-                </div>
-                <!-- END BADGE -->
-                <!-- ACHIEVEMENT -->
-                <div class="tab-pane" id="visachievement">
-
-                    <h3 class="page-header">Your Achievements</h3>
-                    <script id="achievementTemplate" type="text/template">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#<%= id%>"><%= name%></a>
-                                </h4>
-                            </div>
-                            <div id="<%= id%>" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>
-                                                    Description
-                                                </label>
-                                                <p><%= description%></p>
-                                                <label>
-                                                    Point value
-                                                </label>
-                                                <p><%= pointValue%></p>
-                                            </div>
-                                            <% if(badgeId){ %>
-                                            <div class="col-md-6">
-                                                <label>
-                                                    Achievement
-                                                </label>
-                                                <img src="<%= getBadgeImage(badgeId) %>" style="display: block;max-width:200px;max-height:200px;width: auto;
-                                  height: auto;"/>
-                                            </div>
-                                            <% }%>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </script>
-                    <br>
-
-                    <div class="panel-group achievement-row-container" id="accordion" >
-                    </div>
-                </div>
-                <!-- END ACHIEVEMENT -->
-                <!-- QUEST -->
-                <div class="tab-pane" id="visquest">
-                    <h3 class="page-header">Your Quests</h3>
-                    <script id="questCompletedTemplate" type="text/template">
-                        <div class="panel panel-default" id="<%= id%>">
-                            <div class="panel-heading"><%= name%></div>
-                            <div class="panel-body">
-                                <p class="text-center"><%= description%></p>
-                                <p class="text-center"><%= achievementId%></p>
-                            </div>
-                        </div>
-                    </script>
-                    <script id="questRevealedTemplate" type="text/template">
-                        <div class="panel panel-default" id="<%= id%>">
-                            <div class="panel-heading"><%= name%></div>
-                            <div class="panel-body">
-                                <p class="text-center"><%= description%></p>
-                                <p class="text-center"><%= achievementId%></p>
-                            </div>
-                        </div>
-                    </script>
-                    <script id="questProgressTemplate" type="text/template">
-                        <div id="progress-container">
-                            <div class="row">
-                                <% for(var i = 0; i < actionArray.length; i++) { %>
-                                <div class="col-xs-6 col-sm-3 placeholder">
-                                    <div class="circleQuestProgress" id="<%= actionArray[i].action %>">
-                                        <h4 class="queststatus <% if(actionArray[i].isCompleted){ %>
-                        text-info
-                        <% } else { %>
-
-                        <% } %>">
-                                            <b><%= actionArray[i].times %>/<%= actionArray[i].maxTimes %></b>
-                                        </h4>
-                                        <!-- <img src="https://robohash.org/roboavatar.png" alt="avatar" class="avatar"> -->
-                                        <!--                  <span class="label">
-                                                             <%= parseInt(100 * (actionArray[i].times / actionArray[i].maxTimes)) %> %
-                                                          </span> -->
-                                        <span class="label">
-                         <!-- <%= actionArray[i].times %>/<%= actionArray[i].maxTimes %>  -->
-                      </span>
-
-
-                                    </div>
-                                    <h4><%= actionArray[i].action %> </h4>
-
-                                </div>
-                                <% } %>
-
-
-                            </div>
-
-                            <div class="row">
-                                <div class="progress">
-
-                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
-                                        <%= progress %>%
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </script>
-                    <br>
-                    <div class="container-fluid">
-                        <div class="row" id="quest-row-container">
-                            <div class="col-md-6">
-                                <div class="panel-group">
-                                    <div class="panel panel-default" >
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" href="#quest-revealed-collapse" aria-expanded="true">Revealed Quests</a>
-                                            </h4>
-                                        </div>
-
-                                        <div id="quest-revealed-collapse" class="panel-collapse collapse in">
-                                            <div class="panel-body" id="quest-revealed">Panel Content</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="panel-group" id="accordion">
-                                    <div class="panel panel-default" >
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <a data-toggle="collapse" href="#quest-completed-collapse">Completed Quest</a>
-                                            </h4>
-                                        </div>
-                                        <div id="quest-completed-collapse" class="panel-collapse collapse in">
-                                            <div class="panel-body" id="quest-completed">Panel Content</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END QUEST -->
-                <!-- LOCAL LEADERBOARD -->
-                <div class="tab-pane" id="vislocalleaderboard">
-                    <h3 class="page-header">Leaderboard</h3>
-                    <table id="list_local_leaderboard" class="table table-condensed table-striped" data-toggle="bootgrid">
-                        <thead>
-                        <tr>
-                            <th data-column-id="rank" data-order="asc" data-type="numeric">#</th>
-                            <th data-column-id="memberId" data-identifier="true" data-type="string">Member Name</th>
-                            <th data-column-id="pointValue" data-type="numeric">Point</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-                <!-- END LOCAL LEADERBOARD -->
-                <!-- GLOBAL LEADERBOARD -->
-                <div class="tab-pane" id="visgloballeaderboard">
-                    <h3 class="page-header">Global Leaderboard</h3>
-                    <table id="list_global_leaderboard" class="table table-condensed table-striped" data-toggle="bootgrid">
-                        <thead>
-                        <tr>
-                            <th data-column-id="rank" data-order="asc" data-type="numeric">#</th>
-                            <th data-column-id="memberId" data-identifier="true" data-type="string">Member Name</th>
-                            <th data-column-id="pointValue" data-type="numeric">Point</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-                <!-- END GLOBAL LEADERBOARD -->
-                <!-- TRIGGER ACTION -->
-                <!--     <div class="tab-pane" id="vistriggeraction">
-                      <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Action name" id="triggeraction">
-                        <span class="input-group-btn">
-                              <button class="btn btn-secondary" type="button" id="triggeraction" >Trigger!</button>
-                          </span>
-
-                      </div>
-                    </div> -->
-                <!-- END TRIGGER ACTION -->
-            </div>
-        </div><!--/row-offcanvas -->
-        <div id="modalspinner" style="display: none">
-            <div class="center">
-                <img alt="" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/img/loading.svg" />
-            </div>
+        <div id="gamificationTab2" class="gamificationTab">
+            <h1>Tab 2</h1>
         </div>
-        <!-- modal notification -->
-        <div class="modal" id="modalnotif" role="dialog">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4>Notification</h4>
-                    </div>
-                    <div class="modal-body">
-
-                    </div>
-                </div>
-            </div>
+        <div id="gamificationTab3" class="gamificationTab">
+            <h1>Tab 3</h1>
+        </div>
+        <div id="gamificationTab4" class="gamificationTab">
+            <h1>Tab 4</h1>
         </div>
     </template>
     <script>
@@ -365,55 +83,22 @@
                 super();
             }
 
-            hideAllTabs() {
-                this.$.vishome.style.display = "none";
-                this.$.vishome.style.visibility = "hidden";
-                this.$.visbadge.style.display = "none";
-                this.$.visbadge.style.visibility = "hidden";
-                this.$.visachievement.style.display = "none";
-                this.$.visachievement.style.visibility = "hidden";
-                this.$.visquest.style.display = "none";
-                this.$.visquest.style.visibility = "hidden";
-                this.$.vislocalleaderboard.style.display = "none";
-                this.$.vislocalleaderboard.style.visibility = "hidden";
-                this.$.visgloballeaderboard.style.display = "none";
-                this.$.visgloballeaderboard.style.visibility = "hidden";
-            }
+            showTab(e, a) {
+                //Hide all Tabs
+                var i = 1;
+                var curElem = this.shadowRoot.querySelector('#gamificationTab' + i);
+                while (curElem != undefined)
+                {
+                    curElem.style.display = 'none';
+                    this.shadowRoot.querySelector('#showTab' + i).style.fontWeight = "normal";
+                    i++;
+                    curElem = this.shadowRoot.querySelector('#gamificationTab' + i);
+                }
 
-            showHomeTab() {
-                this.hideAllTabs();
-                this.$.vishome.style.display = "block";
-                this.$.vishome.style.visibility = "visible";
-            }
-
-            showBadgeTab() {
-                this.hideAllTabs();
-                this.$.visbadge.style.display = "block";
-                this.$.visbadge.style.visibility = "visible";
-            }
-
-            showAchievementTab() {
-                this.hideAllTabs();
-                this.$.visachievement.style.display = "block";
-                this.$.visachievement.style.visibility = "visible";
-            }
-
-            showQuestTab() {
-                this.hideAllTabs();
-                this.$.visquest.style.display = "block";
-                this.$.visquest.style.visibility = "visible";
-            }
-
-            showLocalLeaderboardTab() {
-                this.hideAllTabs();
-                this.$.vislocalleaderboard.style.display = "block";
-                this.$.vislocalleaderboard.style.visibility = "visible";
-            }
-
-            showGlobalLeaderboardTab() {
-                this.hideAllTabs();
-                this.$.visgloballeaderboard.style.display = "block";
-                this.$.visgloballeaderboard.style.visibility = "visible";
+                //Show selected tab
+                var tabID = e.target.id.slice(-1);
+                e.target.style.fontWeight = 'bold';
+                this.shadowRoot.querySelector('#gamificationTab' + tabID).style.display = 'block';
             }
 
         }
