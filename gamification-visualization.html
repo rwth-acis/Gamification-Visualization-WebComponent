@@ -2,106 +2,37 @@
 
 <dom-module id="gamification-visualization" >
     <template>
-
-        <style>
-            /* shadow DOM styles */
-            :host {
-                font-family: sans-serif;
-            }
-
-            #gamificationNavigation {
-                width: 140px;
-            }
-
-            #gamificationNavigation a {
-
-                display: block;
-                float: left;
-
-                margin: 3px 10px;
-                padding: 12px;
-                width: 130px;
-
-                border: 2px solid #102279;
-                border-radius: 5px;
-
-                text-align: center;
-                font-size: 13pt;
-                color: black;
-            }
-
-            #gamificationNavigation a:hover {
-
-                text-decoration: none;
-                font-weight: bold;
-                background-color: #f0f0f0;
-            }
-
-            .gamificationTab {
-                display: none;
-            }
-
-        </style>
-        <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
         <link href="css/vis.css" rel="stylesheet">
 
-        <!-- shadow DOM -->
-
         <nav id="gamificationNavigation">
-            <a id="showTab1" on-click="showTab">Overview</a>
-            <a id="showTab2" on-click="showTab">Badges</a>
-            <a id="showTab3" on-click="showTab">Quests</a>
-            <a id="showTab4" on-click="showTab">Leaderboard</a>
+            <a id="showTab1" class="gamificationDefaultTabNav" on-click="showTab">Overview</a>
+            <a id="showTab2" on-click="showTab">Introduction</a>
+            <a id="showTab3" on-click="showTab">Badges</a>
+            <a id="showTab4" on-click="showTab">Quests</a>
+            <a id="showTab5" on-click="showTab">Leaderboard</a>
         </nav>
-        <div id="gamificationTab1"  class="gamificationTab">
-            <h1>Hallo</h1>
-            <p>Backend-URL: [[backendurl]]</p>
+        <div id="gamificationTab1"  class="gamificationTab gamificationDefaultTab">
+            <h1>Hi User!</h1>
+            <p>Influence: <br /> <span>83</span></p>
+            <p>Level: <br /><span>Tourist</span> <br> Noch 12 Einfluss bis Citizen.</p>
+            <p>Rank: <span>18</span></p>
         </div>
         <div id="gamificationTab2" class="gamificationTab">
-            <h1>Tab 2</h1>
+            <h1>Introduction</h1>
+            <div class="left"> <img src="img/bazaar.jpg" width="200" class="left"/></div>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. </p>
+            <p>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>
+            <img src="img/stadthalter.png" width="200" />
         </div>
         <div id="gamificationTab3" class="gamificationTab">
-            <h1>Tab 3</h1>
+            <h1>Badges</h1>
         </div>
         <div id="gamificationTab4" class="gamificationTab">
-            <h1>Tab 4</h1>
+            <h1>Quests</h1>
+        </div>
+        <div id="gamificationTab5" class="gamificationTab">
+            <h1>Leaderboard</h1>
         </div>
     </template>
-    <script>
-        class GamificationVisualization extends Polymer.Element {
-            static get is() {
-                return "gamification-visualization";
-            }
-            static get properties() {
-                return {
-                    backendurl: {
-                        type: String
-                    }
-                }
-            }
-            constructor() {
-                super();
-            }
-
-            showTab(e, a) {
-                //Hide all Tabs
-                var i = 1;
-                var curElem = this.shadowRoot.querySelector('#gamificationTab' + i);
-                while (curElem != undefined)
-                {
-                    curElem.style.display = 'none';
-                    this.shadowRoot.querySelector('#showTab' + i).style.fontWeight = "normal";
-                    i++;
-                    curElem = this.shadowRoot.querySelector('#gamificationTab' + i);
-                }
-
-                //Show selected tab
-                var tabID = e.target.id.slice(-1);
-                e.target.style.fontWeight = 'bold';
-                this.shadowRoot.querySelector('#gamificationTab' + tabID).style.display = 'block';
-            }
-
-        }
-        customElements.define(GamificationVisualization.is, GamificationVisualization);
-    </script>
+    <script src="js/gamification-visualization.js"></script>
 </dom-module>
