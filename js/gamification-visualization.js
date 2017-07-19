@@ -31,7 +31,7 @@ class GamificationVisualization extends Polymer.Element {
 
 
         //TODO removeFollowingLine in productive environment
-        localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMDM4NjMyNiwiaWF0IjoxNTAwMzgyNzI2LCJqdGkiOiI0YWU2ZjFhNi0yYzAwLTRhZjktOTJmNi0yOWZlNzI1ZjQwZTQifQ.dCDPBc9vd2XREBdfmNSCJrtiINMc1FDdxiXRji7ZekbE_w1xna9f02ykPgC35tD0IcRjswPqe0nIa9wXC589Q85xdEIA0LMFFQTgiBmaC6DzBK0bQzmg4xAdwSgraQSnJE8IO0Abj_KGsS1G-7aSNdl4D3P_CC6vw72qax9ZxGc");
+        localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMDQ2NjI1MCwiaWF0IjoxNTAwNDYyNjUwLCJqdGkiOiI0ZTM0Yjg2Yy04ODdkLTQ4MDItYTYxMS02ZjQ0NzViYWIxMWMifQ.vesXAWr_C6kVxagA50idGYERgCQiz3BBT3tcGULUf8AH_Hb0itSpDQ7HUoZDMyT8_zF9bJzUso71_IhrngSBMZz-NjnkaMOuy3Dx_7Ft5n7c3-nim8ievmW_xymg6LEYQ7J3W65iFr1ODsl5iwNvLCodwu-ycgyf8PxtssfmTI0");
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
 
         this.loadGamificationData();
@@ -116,16 +116,6 @@ class GamificationVisualization extends Polymer.Element {
         this.shadowRoot.querySelector('#gamificationTab' + tabID).style.display = 'block';
     }
 
-    // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
-    errorMessage(errorObj) {
-        if(errorObj == 401) {
-            alert('You are not logged in. Log in to use the gamification.')
-        }
-        else {
-            alert('An error occured with the gamification: ' + errorObj);
-        }
-    }
-
 
     //----------------------
     //       Framework
@@ -203,6 +193,16 @@ class GamificationVisualization extends Polymer.Element {
             }
         });
         request.send("");
+    }
+
+    // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
+    errorMessage(errorObj) {
+        if(errorObj == 401) {
+            alert('You are not logged in. Log in to use the gamification.')
+        }
+        else {
+            alert('An error occured with the gamification: ' + errorObj);
+        }
     }
 
     //Visualization
