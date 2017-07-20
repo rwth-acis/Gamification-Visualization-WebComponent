@@ -1,65 +1,130 @@
 /* shadow DOM styles */
-:host {
-  font-family: sans-serif;
+:host
+{
+    font-family: sans-serif;
 }
 
-#gamificationNavigation {
-  width: 140px;
+#gamificationNavigation
+{
+    width: 140px;
 }
 
 #gamificationNavigation a {
+    display: block;
+    float: left;
 
-  display: block;
-  float: left;
+    margin: 3px 10px;
+    padding: 10px;
+    width: 130px;
 
-  margin: 3px 10px;
-  padding: 12px;
-  width: 130px;
+    border: 2px solid #d6b661;
+    border-radius: 1px;
 
-  border: 2px solid #0a670d;
-  border-radius: 6px;
-
-  text-align: center;
-  font-size: 13pt;
-  color: black;
+    text-align: center;
+    font-size: 13pt;
+    color: black;
 }
 
-#gamificationNavigation a:hover {
-
-  text-decoration: none;
-  font-weight: bold;
-  background-color: #EBF4EB;
-}
-
-.gamificationTab {
-  display: none;
-  margin-left: 150px;
-  padding: 5px;
-}
-
-.gamificationDefaultTab {
-  display: block;
-}
-
-.gamificationDefaultTabNav
+#gamificationNavigation a:hover
 {
-  font-weight: bold;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.gamificationTab
+{
+    display: none;
+    margin-left: 170px;
+    padding: 5px;
 }
 
 .gamificationTab h1
 {
-  font-size: 20pt;
-  margin-top: 0;
+    font-size: 20pt;
+    margin-top: 0;
+}
+
+#loadingInfo
+{
+    display: block;
+}
+
+.gamificationTab div
+{
+    margin-bottom: 10px;
+    border: 1px solid #6d6d6d;
+    padding: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.gamificationTab div img
+{
+    float: left;
+    margin-right: 15px;
+}
+
+.gamificationTab .fieldTitle
+{
+    font-weight: bold;
+}
+
+.gamificationTab h4
+{
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.gamificationTab p
+{
+    margin: 0;
+}
+
+#achievements, #quests
+{
+    border: none;
+    padding: 0;
+}
+
+.gamificationTab #quests table
+{
+    margin: 15px 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+.gamificationTab #quests table th
+ {
+     text-align: left;
+ }
+
+.gamificationTab #leaderboard
+{
+    width: 100%;
+    border: 1px solid #6d6d6d;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.gamificationTab #leaderboard th
+{
+    border-bottom: 1px solid #6d6d6d;
+}
+
+.gamificationTab #leaderboard td, .gamificationTab #leaderboard th
+{
+    padding: 3px;
 }
 
 .left
 {
-  float: left;
-  margin: 12px;
+    float: left;
+    margin: 12px;
 }
 
 .right
 {
-  float: right;
-  margin: 12px;
+    float: right;
+    margin: 12px;
 }

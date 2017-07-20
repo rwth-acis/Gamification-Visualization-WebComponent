@@ -31,7 +31,7 @@ class GamificationVisualization extends Polymer.Element {
 
 
         //TODO removeFollowingLine in productive environment
-        localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMDU2MDY0OSwiaWF0IjoxNTAwNTU3MDQ5LCJqdGkiOiIxMmUzZWVhMi1mOTBmLTQzMzgtYTNhMS00ODdlY2NiMWQ5MDEifQ.PhHA4m1L6b4KfhOPZBrZsNaGX-UYFluCNISdkXdU65N6H4ZYNgDQNa_JIcuWv7Tm4lbbLME9eKbwrXxk-mpz9rmJsnVzisFvJdTYfnl4sLedloT-bHTAEPO7Ea22WxwuKtq380ATii-JyQxKNjc-uKlg_536kh8-PgQtfMGeQaI");
+        localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMDU2ODYxNSwiaWF0IjoxNTAwNTY1MDE1LCJqdGkiOiI2YTJiMzA5NC04MjFkLTQ0YTgtYWJhYS0wNTA2OTc1NDBjMjAifQ.oph9NxN4j-4eZat81ltkoDsodHcBMX6Z7IWKxE0g_KtmaR1oGurZfyTqzXuKDZWJ0PLS2x2To5nHP2SJuhx72vdEeKltVbxx59iyIzDNnViY5IjCMj-HsBK4RrkOd9iXfFuzJ8JSvzH6KMZWZx-DUxaFc3mTSioYGqhfCHDQrrY");
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
 
         this.loadGamificationData();
@@ -51,7 +51,8 @@ class GamificationVisualization extends Polymer.Element {
             self._memberStatus = res;
 
             // Add fetched memberStatus to overview tab
-            self.shadowRoot.querySelector('#gamificationPointUnit').innerHTML = res.pointUnitName;
+            self.shadowRoot.querySelector('#gamificationUsername').innerHTML = self.memberid;
+            self.shadowRoot.querySelector('#gamificationPointUnit').innerHTML = res.pointUnitName + ":";
             self.shadowRoot.querySelector('#gamificationPoints').innerHTML = res.memberPoint;
             self.shadowRoot.querySelector('#gamificationLevel').innerHTML = res.memberLevelName;
             self.shadowRoot.querySelector('#gamificationRank').innerHTML = res.rank;
@@ -66,22 +67,27 @@ class GamificationVisualization extends Polymer.Element {
                 var levInfo = "";
             }
             self.shadowRoot.querySelector('#gamificationNextLevelInfo').innerHTML = levInfo;
+
+            self.showFirstTab();
         },this.errorMessage);
 
         // Badges tab
         this.getAllBadgesOfMember(function(res)
         {
-            for(var i=0; i<res.length; i++)
+            for(let i=0; i<res.length; i++)
             {
-                var badgeReprensentation = document.createElement('p');
-                var badgeImage = document.createElement('img');
-                var badgeInfo = document.createElement('span');
-                var innerHtml = "<br />";
-                innerHtml += res[i].name + "<br />";
-                innerHtml += res[i].description;
-                badgeInfo.innerHTML = innerHtml;
+                let badgeReprensentation = document.createElement('p');
+                let badgeImage = document.createElement('img');
+                let badgeName = document.createElement('p');
+                badgeName.className = "fieldTitle";
+                let badgeDesc = document.createElement('p');
+
+                badgeName.innerHTML = res[i].name;
+                badgeDesc.innerHTML = res[i].description;
+
                 badgeReprensentation.appendChild(badgeImage);
-                badgeReprensentation.appendChild(badgeInfo);
+                badgeReprensentation.appendChild(badgeName);
+                badgeReprensentation.appendChild(badgeDesc);
                 self.shadowRoot.querySelector("#badges").appendChild(badgeReprensentation);
 
                 self.getBadgeImage(self.gameid, self.memberid, res[i].id, function (imgData) {
@@ -108,49 +114,50 @@ class GamificationVisualization extends Polymer.Element {
 
         // Quests tab
         this.getAllQuestWithStatusOfMember("REVEALED", function (res) {
-            for(let i=0; i<res.length; i++)
+            if(res != null)
             {
-                console.log(res[i]);
-                let questRepresentation = document.createElement('div');
-                questRepresentation.className = "quest";
-                //Title
-                let questTitle = document.createElement('h4');
-                questTitle.innerHTML = res[i].name;
-                questRepresentation.appendChild(questTitle);
-                //Description
-                let questDesc = document.createElement('p');
-                questDesc.innerHTML = res[i].description;
-                questRepresentation.appendChild(questDesc);
-                //Actions
-                let actionsTable = document.createElement('table');
-                questRepresentation.appendChild(actionsTable);
+                for(let i=0; i<res.length; i++) {
+                    let questRepresentation = document.createElement('div');
+                    questRepresentation.className = "quest";
+                    //Title
+                    let questTitle = document.createElement('h4');
+                    questTitle.innerHTML = res[i].name;
+                    questRepresentation.appendChild(questTitle);
+                    //Description
+                    let questDesc = document.createElement('p');
+                    questDesc.innerHTML = res[i].description;
+                    questRepresentation.appendChild(questDesc);
+                    //Actions
+                    let actionsTable = document.createElement('table');
+                    actionsTable.innerHTML = "<tr><th>Action</th><th>Number of executions</th><th>Completed</th></tr>";
+                    questRepresentation.appendChild(actionsTable);
 
-                self.shadowRoot.querySelector("#quests").appendChild(questRepresentation);
+                    self.shadowRoot.querySelector("#quests").appendChild(questRepresentation);
 
-                // Load quest progress
-                self.getOneQuestProgressOfMember(res[i].id, function(res, table) {
-                    for(let i=0; i<res.actionArray.length; i++)
-                    {
-                        let tr = document.createElement('tr');
-                        let acNameTd = document.createElement('td');
-                        let acStatusTd = document.createElement('td');
-                        let acCompletedTd = document.createElement('td');
+                    // Load quest progress
+                    self.getOneQuestProgressOfMember(res[i].id, function (res, table) {
+                        for (let i = 0; i < res.actionArray.length; i++) {
+                            let tr = document.createElement('tr');
+                            let acNameTd = document.createElement('td');
+                            let acStatusTd = document.createElement('td');
+                            let acCompletedTd = document.createElement('td');
 
-                        acNameTd.innerHTML = res.actionArray[i].action;
-                        acStatusTd.innerHTML = res.actionArray[i].times + "/" + res.actionArray[i].maxTimes;
-                        if(res.actionArray[i].isCompleted) {
-                            acCompletedTd.innerHTML = "&#10004;";
-                        } else {
-                            acCompletedTd.innerHTML = "	&#10060;";
+                            acNameTd.innerHTML = res.actionArray[i].action;
+                            acStatusTd.innerHTML = res.actionArray[i].times + "/" + res.actionArray[i].maxTimes;
+                            if (res.actionArray[i].isCompleted) {
+                                acCompletedTd.innerHTML = "&#10004;";
+                            } else {
+                                acCompletedTd.innerHTML = "	&#10060;";
+                            }
+
+                            // Build DOM tree
+                            tr.appendChild(acNameTd);
+                            tr.appendChild(acStatusTd);
+                            tr.appendChild(acCompletedTd);
+                            actionsTable.appendChild(tr);
                         }
-
-                        // Build DOM tree
-                        tr.appendChild(acNameTd);
-                        tr.appendChild(acStatusTd);
-                        tr.appendChild(acCompletedTd);
-                        actionsTable.appendChild(tr);
-                    }
-                }, self.errorMessage);
+                    }, self.errorMessage);
+                }
             }
         }, this.errorMessage);
 
@@ -175,6 +182,13 @@ class GamificationVisualization extends Polymer.Element {
         }, this.errorMessage);
     }
 
+    // Shows the first tab after data was loaded
+    showFirstTab() {
+        this.shadowRoot.querySelector('#loadingInfo').style.display = 'none';
+        this.shadowRoot.querySelector('#showTab1').style.fontWeight = 'bold';
+        this.shadowRoot.querySelector('#gamificationTab1').style.display = 'block';
+    }
+
 
     // Switches the tab of the visualization. Called in the one-click event of the navigation items
     showTab(e, a) {
@@ -184,7 +198,7 @@ class GamificationVisualization extends Polymer.Element {
         while (curElem != undefined)
         {
             curElem.style.display = 'none';
-            this.shadowRoot.querySelector('#showTab' + i).style.fontWeight = "normal";
+            this.shadowRoot.querySelector('#showTab' + i).style.fontWeight = "";
             i++;
             curElem = this.shadowRoot.querySelector('#gamificationTab' + i);
         }
@@ -208,9 +222,6 @@ class GamificationVisualization extends Polymer.Element {
             if (this.readyState == 4 && this.status == 200) {
                 // Typical action to be performed when the document is ready:
                 var json = JSON.parse(xhttp.responseText);
-
-                console.log("Successfully performed get request:");
-                console.log(json);
                 successCallback(json);
             }
             else if(this.readyState == 4)
@@ -256,8 +267,6 @@ class GamificationVisualization extends Polymer.Element {
                 var json = JSON.parse(request.responseText);
                 if(json.ok)
                 {
-                    console.log("Successfully performed get request:");
-                    console.log(json);
                     alert(json.notification);
                     successCallback(json.notification);
                 }
@@ -277,7 +286,7 @@ class GamificationVisualization extends Polymer.Element {
     // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
     errorMessage(errorObj) {
         if(errorObj == 401) {
-            alert('You are not logged in. Log in to use the gamification.')
+            alert('You are not logged in. Log in to use the gamification.');
         }
         else {
             alert('An error occured with the gamification: ' + errorObj);
