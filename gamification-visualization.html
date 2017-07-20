@@ -8,8 +8,9 @@
             <a id="showTab1" class="gamificationDefaultTabNav" on-click="showTab">Overview</a>
             <a id="showTab2" on-click="showTab">Introduction</a>
             <a id="showTab3" on-click="showTab">Badges</a>
-            <a id="showTab4" on-click="showTab">Quests</a>
-            <a id="showTab5" on-click="showTab">Leaderboard</a>
+            <a id="showTab4" on-click="showTab">Achievements</a>
+            <a id="showTab5" on-click="showTab">Quests</a>
+            <a id="showTab6" on-click="showTab">Leaderboard</a>
         </nav>
         <div id="gamificationTab1"  class="gamificationTab gamificationDefaultTab">
             <h1>Hi User!</h1>
@@ -30,11 +31,27 @@
             </div>
         </div>
         <div id="gamificationTab4" class="gamificationTab">
-            <h1>Quests</h1>
-
+            <h1>Achievements</h1>
+            <div id="achievements">
+                <div class="achievement">
+                </div>
+            </div>
         </div>
         <div id="gamificationTab5" class="gamificationTab">
+            <h1>Quests</h1>
+            <div id="quests">
+            </div>
+        </div>
+        <div id="gamificationTab6" class="gamificationTab">
             <h1>Leaderboard</h1>
+            <table id="leaderboard">
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th id="leaderboardPointUnitName"></th>
+                </tr>
+                <tr></tr>
+            </table>
         </div>
     </template>
     <script src="js/gamification-visualization.js"></script>

@@ -31,7 +31,7 @@ class GamificationVisualization extends Polymer.Element {
 
 
         //TODO removeFollowingLine in productive environment
-        localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMDQ2NjI1MCwiaWF0IjoxNTAwNDYyNjUwLCJqdGkiOiI0ZTM0Yjg2Yy04ODdkLTQ4MDItYTYxMS02ZjQ0NzViYWIxMWMifQ.vesXAWr_C6kVxagA50idGYERgCQiz3BBT3tcGULUf8AH_Hb0itSpDQ7HUoZDMyT8_zF9bJzUso71_IhrngSBMZz-NjnkaMOuy3Dx_7Ft5n7c3-nim8ievmW_xymg6LEYQ7J3W65iFr1ODsl5iwNvLCodwu-ycgyf8PxtssfmTI0");
+        localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMDU2MDY0OSwiaWF0IjoxNTAwNTU3MDQ5LCJqdGkiOiIxMmUzZWVhMi1mOTBmLTQzMzgtYTNhMS00ODdlY2NiMWQ5MDEifQ.PhHA4m1L6b4KfhOPZBrZsNaGX-UYFluCNISdkXdU65N6H4ZYNgDQNa_JIcuWv7Tm4lbbLME9eKbwrXxk-mpz9rmJsnVzisFvJdTYfnl4sLedloT-bHTAEPO7Ea22WxwuKtq380ATii-JyQxKNjc-uKlg_536kh8-PgQtfMGeQaI");
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
 
         this.loadGamificationData();
@@ -55,6 +55,9 @@ class GamificationVisualization extends Polymer.Element {
             self.shadowRoot.querySelector('#gamificationPoints').innerHTML = res.memberPoint;
             self.shadowRoot.querySelector('#gamificationLevel').innerHTML = res.memberLevelName;
             self.shadowRoot.querySelector('#gamificationRank').innerHTML = res.rank;
+
+            // Add point unit name to leaderboard table header
+            self.shadowRoot.querySelector('#leaderboardPointUnitName').innerHTML = res.pointUnitName;
 
             if(res.nextLevelPoint != null) {
                 var levInfo = "Next Level: " + res.nextLevelName + " at " + res.nextLevelPoint + " " + res.pointUnitName;
@@ -84,16 +87,92 @@ class GamificationVisualization extends Polymer.Element {
                 self.getBadgeImage(self.gameid, self.memberid, res[i].id, function (imgData) {
                     badgeImage.src = imgData;
                 });
-
-
             }
         }, this.errorMessage);
 
+        // Achievements tab
+        this.getAllAchievementsOfMember(function (res) {
+            for(let i=0; i<res.length; i++)
+            {
+                let div = document.createElement('div');
+                div.className = "achievement";
+                let achmntName = document.createElement('h4');
+                achmntName.innerHTML = res[i].name;
+                let achmntDesc = document.createElement('p');
+                achmntDesc.innerHTML = res[i].description;
+                div.appendChild(achmntName);
+                div.appendChild(achmntDesc);
+                self.shadowRoot.querySelector("#achievements").appendChild(div);
+            }
+        },this.errorMessage);
+
         // Quests tab
-        //TODO
+        this.getAllQuestWithStatusOfMember("REVEALED", function (res) {
+            for(let i=0; i<res.length; i++)
+            {
+                console.log(res[i]);
+                let questRepresentation = document.createElement('div');
+                questRepresentation.className = "quest";
+                //Title
+                let questTitle = document.createElement('h4');
+                questTitle.innerHTML = res[i].name;
+                questRepresentation.appendChild(questTitle);
+                //Description
+                let questDesc = document.createElement('p');
+                questDesc.innerHTML = res[i].description;
+                questRepresentation.appendChild(questDesc);
+                //Actions
+                let actionsTable = document.createElement('table');
+                questRepresentation.appendChild(actionsTable);
+
+                self.shadowRoot.querySelector("#quests").appendChild(questRepresentation);
+
+                // Load quest progress
+                self.getOneQuestProgressOfMember(res[i].id, function(res, table) {
+                    for(let i=0; i<res.actionArray.length; i++)
+                    {
+                        let tr = document.createElement('tr');
+                        let acNameTd = document.createElement('td');
+                        let acStatusTd = document.createElement('td');
+                        let acCompletedTd = document.createElement('td');
+
+                        acNameTd.innerHTML = res.actionArray[i].action;
+                        acStatusTd.innerHTML = res.actionArray[i].times + "/" + res.actionArray[i].maxTimes;
+                        if(res.actionArray[i].isCompleted) {
+                            acCompletedTd.innerHTML = "&#10004;";
+                        } else {
+                            acCompletedTd.innerHTML = "	&#10060;";
+                        }
+
+                        // Build DOM tree
+                        tr.appendChild(acNameTd);
+                        tr.appendChild(acStatusTd);
+                        tr.appendChild(acCompletedTd);
+                        actionsTable.appendChild(tr);
+                    }
+                }, self.errorMessage);
+            }
+        }, this.errorMessage);
 
         //Leaderboard
-        //TODO
+        this.getLocalLeaderboard(this.gameid, this.memberid, function (res) {
+            for(let i=0; i<res.rows.length; i++)
+            {
+                let tr = document.createElement('tr');
+                let rank = document.createElement('td');
+                let user = document.createElement('td');
+                let points = document.createElement('td');
+
+                rank.innerHTML = res.rows[i].rank;
+                user.innerHTML = res.rows[i].memberId;
+                points.innerHTML = res.rows[i].pointValue;
+
+                tr.appendChild(rank);
+                tr.appendChild(user);
+                tr.appendChild(points);
+                self.shadowRoot.querySelector('#leaderboard').appendChild(tr);
+            }
+        }, this.errorMessage);
     }
 
 
@@ -253,6 +332,12 @@ class GamificationVisualization extends Polymer.Element {
     {
         var endPointURL = "visualization/achievements/"+this.gameid+"/"+this.memberid+"/"+achievementId;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
+    }
+
+    getLocalLeaderboard(gameId, memberId, successCallback, errorCallback)
+    {
+        var endPointURL = "visualization/leaderboard/local/" + gameId + "/" + memberId + "?current=1&rowCount=500&searchPhrase";
+        return this.sendRequestJsonResponse(endPointURL, successCallback, errorCallback);
     }
 }
 customElements.define(GamificationVisualization.is, GamificationVisualization);
