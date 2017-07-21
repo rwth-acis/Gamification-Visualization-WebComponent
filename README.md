@@ -19,7 +19,10 @@ Import the Component in your sourcecode and add the following DOM-element:
 ```
 
 The attribute "backendurl" should contain the url of your Gamification-Framework backend server.
-(See https://github.com/rwth-acis/Gamification-Framework)
-"gameid" is the id of the game in the Gamification Framework to visualize
+(See https://github.com/rwth-acis/Gamification-Framework).
+
+"gameid" is the id of the game in the Gamification Framework to visualize.
+
 "memberid" is the id of the user currently logged in. It is used as memberId for the backend api calls.
+
 "accesstokenkeyname" is the name of the field in the local storage where the access token for the authorization of the current user is saved.
