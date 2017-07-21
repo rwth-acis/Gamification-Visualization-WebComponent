@@ -27,4 +27,10 @@ The attribute "backendurl" should contain the url of your Gamification-Framework
 
 "accesstokenkeyname" is the name of the field in the local storage where the access token for the authorization of the current user is saved.
 
-The file index.html contains a example integration of the component into an application.
+Run Web Application
+----------
+The file index.html contains a example integration of the component into an application. To run the it open a console at this path and call
+```
+polymer serve
+```
+Open the url returned in the console in your browser.
