@@ -1,44 +1,42 @@
-class GamificationVisualization extends Polymer.Element {
-    static get is() {
-        return "gamification-visualization";
-    }
-    static get properties() {
-        return {
-            // The URL-Endpoint of the Gamification-Framework
-            backendurl: {
-                type: String
-            },
+Polymer({
+    is: "gamification-visualization",
 
-            // the id of the game to visualize
-            gameid:  {
-                type: String
-            },
+    // add properties and methods on the element's prototype
 
-            // the username of the current user to use for the api calls
-            memberid: {
-                type: String
-            },
+    properties: {
+        // The URL-Endpoint of the Gamification-Framework
+        backendurl: {
+            type: String
+        },
 
-            // The key of the access-token field in the local Storage
-            accesstokenkeyname: {
-                type: String
-            }
+        // the id of the game to visualize
+        gameid:  {
+            type: String
+        },
+
+        // the username of the current user to use for the api calls
+        memberid: {
+            type: String
+        },
+
+        // The key of the access-token field in the local Storage
+        accesstokenkeyname: {
+            type: String
         }
-    }
+    },
 
-    ready(){
-        super.ready();
+    ready: function(){
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
 
         this.loadGamificationData();
-    }
+    },
 
     //----------------------
     //          UI
     //----------------------
 
     // Gets the points, level, rank, badges, quests, leaderboard info from the Gamification backend and displays it to the user
-    loadGamificationData() {
+    loadGamificationData: function() {
         var self = this;
 
         // Overview tab
@@ -47,14 +45,14 @@ class GamificationVisualization extends Polymer.Element {
             self._memberStatus = res;
 
             // Add fetched memberStatus to overview tab
-            self.shadowRoot.querySelector('#gamificationUsername').innerHTML = self.memberid;
-            self.shadowRoot.querySelector('#gamificationPointUnit').innerHTML = res.pointUnitName + ":";
-            self.shadowRoot.querySelector('#gamificationPoints').innerHTML = res.memberPoint;
-            self.shadowRoot.querySelector('#gamificationLevel').innerHTML = res.memberLevelName;
-            self.shadowRoot.querySelector('#gamificationRank').innerHTML = res.rank;
+            self.$$('#gamificationUsername').innerHTML = self.memberid;
+            self.$$('#gamificationPointUnit').innerHTML = res.pointUnitName + ":";
+            self.$$('#gamificationPoints').innerHTML = res.memberPoint;
+            self.$$('#gamificationLevel').innerHTML = res.memberLevelName;
+            self.$$('#gamificationRank').innerHTML = res.rank;
 
             // Add point unit name to leaderboard table header
-            self.shadowRoot.querySelector('#leaderboardPointUnitName').innerHTML = res.pointUnitName;
+            self.$$('#leaderboardPointUnitName').innerHTML = res.pointUnitName;
 
             if(res.nextLevelPoint != null) {
                 var levInfo = "Next Level: " + res.nextLevelName + " at " + res.nextLevelPoint + " " + res.pointUnitName;
@@ -62,7 +60,7 @@ class GamificationVisualization extends Polymer.Element {
             else {
                 var levInfo = "";
             }
-            self.shadowRoot.querySelector('#gamificationNextLevelInfo').innerHTML = levInfo;
+            self.$$('#gamificationNextLevelInfo').innerHTML = levInfo;
 
             self.showFirstTab();
         },this.errorMessage);
@@ -84,7 +82,7 @@ class GamificationVisualization extends Polymer.Element {
                 badgeReprensentation.appendChild(badgeImage);
                 badgeReprensentation.appendChild(badgeName);
                 badgeReprensentation.appendChild(badgeDesc);
-                self.shadowRoot.querySelector("#badges").appendChild(badgeReprensentation);
+                self.$$("#badges").appendChild(badgeReprensentation);
 
                 self.getBadgeImage(self.gameid, self.memberid, res[i].id, function (imgData) {
                     badgeImage.src = imgData;
@@ -104,7 +102,7 @@ class GamificationVisualization extends Polymer.Element {
                 achmntDesc.innerHTML = res[i].description;
                 div.appendChild(achmntName);
                 div.appendChild(achmntDesc);
-                self.shadowRoot.querySelector("#achievements").appendChild(div);
+                self.$$("#achievements").appendChild(div);
             }
         },this.errorMessage);
 
@@ -128,7 +126,7 @@ class GamificationVisualization extends Polymer.Element {
                     actionsTable.innerHTML = "<tr><th>Action</th><th>Number of executions</th><th>Completed</th></tr>";
                     questRepresentation.appendChild(actionsTable);
 
-                    self.shadowRoot.querySelector("#quests").appendChild(questRepresentation);
+                    self.$$("#quests").appendChild(questRepresentation);
 
                     // Load quest progress
                     self.getOneQuestProgressOfMember(res[i].id, function (res, table) {
@@ -173,37 +171,37 @@ class GamificationVisualization extends Polymer.Element {
                 tr.appendChild(rank);
                 tr.appendChild(user);
                 tr.appendChild(points);
-                self.shadowRoot.querySelector('#leaderboard').appendChild(tr);
+                self.$$('#leaderboard').appendChild(tr);
             }
         }, this.errorMessage);
-    }
+    },
 
     // Shows the first tab after data was loaded
-    showFirstTab() {
-        this.shadowRoot.querySelector('#loadingInfo').style.display = 'none';
-        this.shadowRoot.querySelector('#showTab1').style.fontWeight = 'bold';
-        this.shadowRoot.querySelector('#gamificationTab1').style.display = 'block';
-    }
+    showFirstTab: function() {
+        this.$$('#loadingInfo').style.display = 'none';
+        this.$$('#showTab1').style.fontWeight = 'bold';
+        this.$$('#gamificationTab1').style.display = 'block';
+    },
 
 
     // Switches the tab of the visualization. Called in the one-click event of the navigation items
-    showTab(e, a) {
+    showTab: function(e, a) {
         //Hide all Tabs
         var i = 1;
-        var curElem = this.shadowRoot.querySelector('#gamificationTab' + i);
+        var curElem = this.$$('#gamificationTab' + i);
         while (curElem != undefined)
         {
             curElem.style.display = 'none';
-            this.shadowRoot.querySelector('#showTab' + i).style.fontWeight = "";
+            this.$$('#showTab' + i).style.fontWeight = "";
             i++;
-            curElem = this.shadowRoot.querySelector('#gamificationTab' + i);
+            curElem = this.$$('#gamificationTab' + i);
         }
 
         //Show selected tab
         var tabID = e.target.id.slice(-1);
         e.target.style.fontWeight = 'bold';
-        this.shadowRoot.querySelector('#gamificationTab' + tabID).style.display = 'block';
-    }
+        this.$$('#gamificationTab' + tabID).style.display = 'block';
+    },
 
 
     //----------------------
@@ -211,7 +209,7 @@ class GamificationVisualization extends Polymer.Element {
     //----------------------
 
     // Performs the in endPointURL specified get-Request, parses the response JSON and calls either the successCallback-function or the errorCallback.
-    sendRequestJsonResponse(endPointURL, successCallback, errorCallback)
+    sendRequestJsonResponse: function(endPointURL, successCallback, errorCallback)
     {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -230,10 +228,10 @@ class GamificationVisualization extends Polymer.Element {
         xhttp.open("GET", this.backendurl + endPointURL, true);
         xhttp.setRequestHeader('access_token', this._accessToken);
         xhttp.send();
-    }
+    },
 
     // gets the image for a badge. Sets the access-token in the image request.
-    getBadgeImage(gameId, memberId, badgeId, successCallback) {
+    getBadgeImage: function(gameId, memberId, badgeId, successCallback) {
         var self = this;
         var oReq = new XMLHttpRequest();
         oReq.open("GET", self.backendurl + "visualization/badges/" + gameId + "/" + memberId + "/" + badgeId + "/img", true);
@@ -249,10 +247,10 @@ class GamificationVisualization extends Polymer.Element {
             }
         };
         oReq.send(null);
-    }
+    },
 
     // triggers an action for the current user. If the operation was successful it calls the successCallback and passes the notification to show as parameter or undefined if there aren't any.
-    triggerAction(actionId, successCallback, errorCallback)
+    triggerAction: function(actionId, successCallback, errorCallback)
     {
         var request = new XMLHttpRequest();
         request.open("POST", this.backendurl + "visualization/actions/" + this.gameid + "/" + actionId + "/" + this.memberid);
@@ -277,72 +275,71 @@ class GamificationVisualization extends Polymer.Element {
             }
         });
         request.send("");
-    }
+    },
 
     // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
-    errorMessage(errorObj) {
+    errorMessage: function(errorObj) {
         if(errorObj == 401) {
             alert('You are not logged in. Log in to use the gamification.');
         }
         else {
             alert('An error occured with the gamification: ' + errorObj);
         }
-    }
+    },
 
     //Visualization
-    getMemberStatus(successCallback, errorCallback)
+    getMemberStatus: function(successCallback, errorCallback)
     {
         var endPointURL = "visualization/status/"+this.gameid+"/"+this.memberid;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
-    getAllBadgesOfMember(successCallback, errorCallback)
+    getAllBadgesOfMember: function(successCallback, errorCallback)
     {
         var endPointURL = "visualization/badges/"+this.gameid+"/"+this.memberid;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
-    getAllAchievementsOfMember(successCallback, errorCallback)
+    getAllAchievementsOfMember: function(successCallback, errorCallback)
     {
         var endPointURL = "visualization/achievements/"+this.gameid+"/"+this.memberid;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
     // COMPLETED, REVEALED, ALL
-    getAllQuestWithStatusOfMember(questStatus, successCallback, errorCallback)
+    getAllQuestWithStatusOfMember: function(questStatus, successCallback, errorCallback)
     {
         var endPointURL = "visualization/quests/"+this.gameid+"/"+this.memberid+"/status/"+questStatus;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
-    getOneQuestProgressOfMember(questId, successCallback, errorCallback)
+    getOneQuestProgressOfMember: function(questId, successCallback, errorCallback)
     {
         var endPointURL = "visualization/quests/"+this.gameid+"/"+this.memberid+"/progress/"+questId;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
-    getOneBadgeDetailOfMember(badgeId, successCallback, errorCallback)
+    getOneBadgeDetailOfMember: function(badgeId, successCallback, errorCallback)
     {
         var endPointURL = "visualization/badges/"+this.gameid+"/"+this.memberid+"/"+badgeId;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
-    getOneQuestDetailOfMember(questId, successCallback, errorCallback)
+    getOneQuestDetailOfMember: function(questId, successCallback, errorCallback)
     {
         var endPointURL = "visualization/quests/"+this.gameid+"/"+this.memberid+"/"+questId;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
-    getOneAchievementDetailOfMember(achievementId, successCallback, errorCallback)
+    getOneAchievementDetailOfMember: function(achievementId, successCallback, errorCallback)
     {
         var endPointURL = "visualization/achievements/"+this.gameid+"/"+this.memberid+"/"+achievementId;
         return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
-    }
+    },
 
-    getLocalLeaderboard(gameId, memberId, successCallback, errorCallback)
+    getLocalLeaderboard: function(gameId, memberId, successCallback, errorCallback)
     {
         var endPointURL = "visualization/leaderboard/local/" + gameId + "/" + memberId + "?current=1&rowCount=500&searchPhrase";
         return this.sendRequestJsonResponse(endPointURL, successCallback, errorCallback);
     }
-}
-customElements.define(GamificationVisualization.is, GamificationVisualization);
+});
