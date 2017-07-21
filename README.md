@@ -31,6 +31,7 @@ Run Web Application
 ----------
 The file index.html contains a example integration of the component into an application. To run it open a console at this path and call
 ```
+bower install
 polymer serve
 ```
 Open the url returned in the console in your browser.
