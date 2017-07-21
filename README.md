@@ -1,4 +1,4 @@
-Gamification-Visualization-WebComponent
+Gamification-Visualization-WebComponent Polymer 2.0
 ================================
 
 Polymer Web Component port of https://github.com/rwth-acis/Gamification-Visualization-Frontend

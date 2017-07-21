@@ -36,6 +36,7 @@
     display: none;
     margin-left: 170px;
     padding: 5px;
+    overflow: hidden;
 }
 
 .gamificationTab h1
@@ -62,11 +63,13 @@
 {
     float: left;
     margin-right: 15px;
+    max-width: 100px;
 }
 
 .gamificationTab .fieldTitle
 {
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .gamificationTab h4

@@ -28,10 +28,6 @@ class GamificationVisualization extends Polymer.Element {
 
     ready(){
         super.ready();
-
-
-        //TODO removeFollowingLine in productive environment
-        localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMDU2ODYxNSwiaWF0IjoxNTAwNTY1MDE1LCJqdGkiOiI2YTJiMzA5NC04MjFkLTQ0YTgtYWJhYS0wNTA2OTc1NDBjMjAifQ.oph9NxN4j-4eZat81ltkoDsodHcBMX6Z7IWKxE0g_KtmaR1oGurZfyTqzXuKDZWJ0PLS2x2To5nHP2SJuhx72vdEeKltVbxx59iyIzDNnViY5IjCMj-HsBK4RrkOd9iXfFuzJ8JSvzH6KMZWZx-DUxaFc3mTSioYGqhfCHDQrrY");
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
 
         this.loadGamificationData();
