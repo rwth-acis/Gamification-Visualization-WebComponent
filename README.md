@@ -29,7 +29,7 @@ The attribute "backendurl" should contain the url of your Gamification-Framework
 
 Run Web Application
 ----------
-The file index.html contains a example integration of the component into an application. To run the it open a console at this path and call
+The file index.html contains a example integration of the component into an application. To run it open a console at this path and call
 ```
 polymer serve
 ```
