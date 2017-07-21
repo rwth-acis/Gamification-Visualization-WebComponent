@@ -5,7 +5,7 @@ Polymer Web Component port of https://github.com/rwth-acis/Gamification-Visualiz
 
 Requirements
 ----------
-Make sure node.js, polymer 2.0 and bower is installed.
+Make sure node.js, polymer 2.0 and bower are installed.
 
 Use Web Component
 ----------
