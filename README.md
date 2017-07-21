@@ -1,7 +1,8 @@
-Gamification-Visualization-WebComponent Polymer 2.0
+Gamification-Visualization-WebComponent
 ================================
 
-Polymer Web Component port of https://github.com/rwth-acis/Gamification-Visualization-Frontend
+Polymer Web Component port of https://github.com/rwth-acis/Gamification-Visualization-Frontend. During the development it was necessary to switch back to polymer 1.9.
+A Polymer 2.0 component can be found in the branch "polymer2.0".
 
 Requirements
 ----------
