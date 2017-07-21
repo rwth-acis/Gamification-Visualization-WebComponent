@@ -26,3 +26,5 @@ The attribute "backendurl" should contain the url of your Gamification-Framework
 "memberid" is the id of the user currently logged in. It is used as memberId for the backend api calls.
 
 "accesstokenkeyname" is the name of the field in the local storage where the access token for the authorization of the current user is saved.
+
+The file index.html contains a example integration of the component into an application.
