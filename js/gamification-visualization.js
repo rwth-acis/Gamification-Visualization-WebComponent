@@ -28,7 +28,10 @@ Polymer({
     ready: function(){
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
 
-        this.loadGamificationData();
+        var self = this;
+        this.registerUser(function (res) {
+            self.loadGamificationData();
+        }, this.errorMessage);
     },
 
     //----------------------
@@ -261,13 +264,31 @@ Polymer({
                 var json = JSON.parse(request.responseText);
                 if(json.ok)
                 {
-                    alert(json.notification);
                     successCallback(json.notification);
                 }
                 else
                 {
                     errorCallback();
                 }
+            }
+            else
+            {
+                errorCallback();
+            }
+        });
+        request.send("");
+    },
+
+    // Registers the user in the gamification framework if he is not registered yet
+    registerUser: function(successCallback, errorCallback)
+    {
+        var request = new XMLHttpRequest();
+        request.open("POST", this.backendurl + "gamification/games/validation");
+        request.setRequestHeader("access_token", this._accessToken);
+        request.addEventListener('load', function(event) {
+            if (request.status >= 200 && request.status < 300)
+            {
+                successCallback(JSON.parse(request.responseText));
             }
             else
             {
