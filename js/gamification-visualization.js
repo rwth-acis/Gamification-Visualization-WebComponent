@@ -280,7 +280,10 @@ Polymer({
     // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
     errorMessage: function(errorObj) {
         if(errorObj == 401) {
-            alert('You are not logged in. Log in to use the gamification.');
+            if(this._loginErrorShown != true) {
+                alert('You are not logged in. Log in to use the gamification.');
+                this._loginErrorShown = true;
+            }
         }
         else {
             alert('An error occured with the gamification: ' + errorObj);
