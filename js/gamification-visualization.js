@@ -204,8 +204,8 @@ Polymer({
     // Switches the tab of the visualization. Called in the one-click event of the navigation items
     showTab: function(e, a) {
         //Hide all Tabs
-        var i = 1;
-        var curElem = this.$$('#gamificationTab' + i);
+        let i = 1;
+        let curElem = this.$$('#gamificationTab' + i);
         while (curElem != undefined)
         {
             curElem.style.display = 'none';
@@ -215,9 +215,17 @@ Polymer({
         }
 
         //Show selected tab
-        var tabID = e.target.id.slice(-1);
+        let tabID = e.target.id.slice(-1);
         e.target.style.fontWeight = 'bold';
         this.$$('#gamificationTab' + tabID).style.display = 'block';
+
+        //Introduction tab? trigger action
+        if(tabID == '2')
+        {
+            this.triggerAction('readIntroduction', function (res) {
+                console.log("Triggered readIntroduction-action");
+            }, this.errorMessage)
+        }
     },
 
 
