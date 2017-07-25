@@ -311,7 +311,7 @@ Polymer({
         request.addEventListener('load', function(event) {
             if (request.status >= 200 && request.status < 300)
             {
-                self.addToGame(successCallback, errorCallback);
+                self.addToGame(successCallback, errorCallback, self);
             }
             else
             {
@@ -322,7 +322,7 @@ Polymer({
     },
 
     // adds the member to the game
-    addToGame: function (successCallback, errorCallback) {
+    addToGame: function (successCallback, errorCallback, self) {
         var request = new XMLHttpRequest();
         request.open("POST", this.backendurl + "gamification/games/data/" + self.gameid +  "/" + self.memberid);
         request.setRequestHeader("access_token", this._accessToken);
