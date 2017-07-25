@@ -32,7 +32,7 @@ Polymer({
         // Create a timeout and wait for the memberId to be set.
         var self = this;
         let timeout  = function () {
-            if(this._memberIdSet) {
+            if(self._memberIdSet) {
                 this.registerUser(function (res) { // register the user if he has never used the gamification before
                     self.loadGamificationData(); // then load the frontend
                 }, this.errorMessage);
