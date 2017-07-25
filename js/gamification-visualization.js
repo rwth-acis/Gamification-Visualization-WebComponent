@@ -312,6 +312,7 @@ Polymer({
             if (request.status >= 200 && request.status < 300)
             {
                 //self.addToGame(successCallback, errorCallback, self);
+                successCallback();
             }
             else
             {
