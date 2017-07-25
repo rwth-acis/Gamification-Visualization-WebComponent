@@ -33,7 +33,7 @@ Polymer({
         var self = this;
         let timeout  = function () {
             if(self._memberIdSet) {
-                this.registerUser(function (res) { // register the user if he has never used the gamification before
+                self.registerUser(function (res) { // register the user if he has never used the gamification before
                     self.loadGamificationData(); // then load the frontend
                 }, this.errorMessage);
             }
