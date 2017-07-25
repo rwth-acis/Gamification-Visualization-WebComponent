@@ -27,11 +27,19 @@ Polymer({
 
     ready: function(){
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
-
+        
+        // Create a timeout and wait for the memberId to be set.
         var self = this;
-        this.registerUser(function (res) {
-            self.loadGamificationData();
-        }, this.errorMessage);
+        let timeout  = function () {
+            if(this._memberIdSet) {
+                this.registerUser(function (res) { // register the user if he has never used the gamification before
+                    self.loadGamificationData(); // then load the frontend
+                }, this.errorMessage);
+            }
+            else {
+                setTimeout(timeout, 100);
+            }
+        }
     },
 
     //----------------------
@@ -177,6 +185,10 @@ Polymer({
                 self.$$('#leaderboard').appendChild(tr);
             }
         }, this.errorMessage);
+    },
+
+    _memberidChanged: function(newValue, oldValue) {
+        this._memberIdSet = true;
     },
 
     // Shows the first tab after data was loaded
