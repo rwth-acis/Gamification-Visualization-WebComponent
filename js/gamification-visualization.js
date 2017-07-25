@@ -27,7 +27,7 @@ Polymer({
 
     ready: function(){
         this._accessToken = localStorage.getItem(this.accesstokenkeyname);
-        
+
         // Create a timeout and wait for the memberId to be set.
         var self = this;
         let timeout  = function () {
@@ -39,6 +39,7 @@ Polymer({
             else {
                 setTimeout(timeout, 100);
             }
+            setTimeout(timeout, 100);
         }
     },
 
