@@ -290,12 +290,12 @@ Polymer({
                 }
                 else
                 {
-                    errorCallback();
+                    errorCallback('Error pasing json response');
                 }
             }
             else
             {
-                errorCallback();
+                errorCallback(request.status);
             }
         });
         request.send("");
@@ -314,7 +314,7 @@ Polymer({
             }
             else
             {
-                errorCallback();
+                errorCallback(request.status);
             }
         });
         request.send("");
