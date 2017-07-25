@@ -311,7 +311,7 @@ Polymer({
         request.addEventListener('load', function(event) {
             if (request.status >= 200 && request.status < 300)
             {
-                self.addToGame(successCallback, errorCallback, self);
+                //self.addToGame(successCallback, errorCallback, self);
             }
             else
             {
