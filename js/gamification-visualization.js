@@ -304,6 +304,7 @@ Polymer({
     // Registers the user in the gamification framework if he is not registered yet
     registerUser: function(successCallback, errorCallback)
     {
+        var self = this;
         var request = new XMLHttpRequest();
         request.open("POST", this.backendurl + "gamification/games/validation");
         request.setRequestHeader("access_token", this._accessToken);
