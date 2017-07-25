@@ -16,7 +16,8 @@ Polymer({
 
         // the username of the current user to use for the api calls
         memberid: {
-            type: String
+            type: String,
+            observer: '_memberidChanged'
         },
 
         // The key of the access-token field in the local Storage
