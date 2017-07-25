@@ -54,6 +54,7 @@
 {
     margin-bottom: 10px;
     border: 1px solid #bfbfbf;
+    background: white;
     padding: 10px;
     border-radius: 10px;
     overflow: hidden;
@@ -84,7 +85,7 @@
     margin: 0;
 }
 
-#achievements, #quests
+#achievements, #quests, #badges
 {
     border: none;
     padding: 0;

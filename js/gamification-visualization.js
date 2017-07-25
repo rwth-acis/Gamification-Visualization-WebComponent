@@ -83,7 +83,7 @@ Polymer({
         {
             for(let i=0; i<res.length; i++)
             {
-                let badgeReprensentation = document.createElement('p');
+                let badgeReprensentation = document.createElement('div');
                 let badgeImage = document.createElement('img');
                 let badgeName = document.createElement('p');
                 badgeName.className = "fieldTitle";
