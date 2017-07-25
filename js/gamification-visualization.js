@@ -39,8 +39,8 @@ Polymer({
             else {
                 setTimeout(timeout, 100);
             }
-            setTimeout(timeout, 100);
         }
+        setTimeout(timeout, 100);
     },
 
     //----------------------
