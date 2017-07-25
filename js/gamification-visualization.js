@@ -311,8 +311,14 @@ Polymer({
         request.addEventListener('load', function(event) {
             if (request.status >= 200 && request.status < 300)
             {
-                //self.addToGame(successCallback, errorCallback, self);
-                successCallback();
+                // Check if member was registrated before
+                let response = JSON.parse(request.responseText);
+                if(response.message != "Member already registered") {
+                    self.addToGame(successCallback, errorCallback, self);
+                }
+                else {
+                    successCallback();
+                }
             }
             else
             {
