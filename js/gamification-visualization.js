@@ -222,9 +222,7 @@ Polymer({
         //Introduction tab? trigger action
         if(tabID == '2')
         {
-            this.triggerAction('readIntroduction', function (res) {
-                console.log("Triggered readIntroduction-action");
-            }, this.errorMessage)
+            this.fire('iron-signal', {name: 'gamification', data: "readIntroduction"});
         }
     },
 
@@ -272,33 +270,6 @@ Polymer({
             }
         };
         oReq.send(null);
-    },
-
-    // triggers an action for the current user. If the operation was successful it calls the successCallback and passes the notification to show as parameter or undefined if there aren't any.
-    triggerAction: function(actionId, successCallback, errorCallback)
-    {
-        var request = new XMLHttpRequest();
-        request.open("POST", this.backendurl + "visualization/actions/" + this.gameid + "/" + actionId + "/" + this.memberid);
-        request.setRequestHeader("access_token", this._accessToken);
-        request.addEventListener('load', function(event) {
-            if (request.status >= 200 && request.status < 300)
-            {
-                var json = JSON.parse(request.responseText);
-                if(json.ok)
-                {
-                    successCallback(json.notification);
-                }
-                else
-                {
-                    errorCallback('Error pasing json response');
-                }
-            }
-            else
-            {
-                errorCallback(request.status);
-            }
-        });
-        request.send("");
     },
 
     // Registers the user in the gamification framework if he is not registered yet
