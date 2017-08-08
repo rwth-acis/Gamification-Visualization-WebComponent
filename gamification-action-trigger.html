@@ -43,10 +43,6 @@
                 }
             },
 
-            ready: function () {
-                this._accessToken = localStorage.getItem(this.accesstokenkeyname);
-            },
-
             // entry point when an action is triggered and the
             processActionTringgerEvent: function (e) {
                 if(this.memberid != "anonymous")
@@ -75,9 +71,10 @@
             // triggers an action for the current user. If the operation was successful it calls the successCallback and passes the notification to show as parameter or undefined if there aren't any.
             triggerAction: function(actionId, successCallback, errorCallback)
             {
+                var accessToken = localStorage.getItem(this.accesstokenkeyname);
                 var request = new XMLHttpRequest();
                 request.open("POST", this.backendurl + "visualization/actions/" + this.gameid + "/" + actionId + "/" + this.memberid);
-                request.setRequestHeader("access_token", this._accessToken);
+                request.setRequestHeader("access_token", accessToken);
                 request.addEventListener('load', function(event) {
                     if (request.status >= 200 && request.status < 300)
                     {
