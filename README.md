@@ -1,21 +1,21 @@
 Gamification-Action-Trigger
 ================================
 
-WebComponent which receives the action trigger event, passes it to the gamification backend and shows the action notification if teres is any.
+WebComponent which receives the action trigger event, passes it to the gamification backend and shows the action notification if there is any.
 
 Requirements
 ----------
-Make sure node.js, polymer 2.0 and bower are installed.
+Make sure node.js, polymer and bower are installed.
 
 Use Web Component
 ----------
 Import the Component in your sourcecode and add the following DOM-element:
 ```
-<gamification-visualization backendurl="http://137.226.58.16:8086/"
+<gamification-action-trigger backendurl="http://137.226.58.16:8086/"
                                 gameid="testspiel"
                                 memberid="gottschlich"
                                 accesstokenkeyname="openidconnect-signin-token">
-</gamification-visualization>
+</gamification-action-trigger>
 ```
 
 The attribute "backendurl" should contain the url of your Gamification-Framework backend server.
