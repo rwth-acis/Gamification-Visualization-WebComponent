@@ -49,24 +49,27 @@
 
             // entry point when an action is triggered and the
             processActionTringgerEvent: function (e) {
-                var self = this;
-                this.triggerAction(e.detail, function (notificationResponse) {
-                    console.log(notificationResponse);
-                    if(notificationResponse != undefined) //there are notifications to show
-                    {
-                        let notificationMessage = "";
+                if(this.memberid != "anonymous")
+                {
+                    var self = this;
+                    this.triggerAction(e.detail, function (notificationResponse) {
+                        console.log(notificationResponse);
+                        if (notificationResponse != undefined) //there are notifications to show
+                        {
+                            let notificationMessage = "";
 
-                        for(let i=0; i<notificationResponse.length; i++) {
-                            console.log(notificationResponse[i]);
-                            notificationMessage = notificationMessage + " " + notificationResponse[i].message;
+                            for (let i = 0; i < notificationResponse.length; i++) {
+                                console.log(notificationResponse[i]);
+                                notificationMessage = notificationMessage + " " + notificationResponse[i].message;
+                            }
+
+                            self.$.notification.text = notificationMessage;
+                            self.$.notification.open();
                         }
-
-                        self.$.notification.text = notificationMessage;
-                        self.$.notification.open();
-                    }
-                }, function () {
-                    alert("Error triggering action");
-                });
+                    }, function () {
+                        alert("Error triggering action");
+                    });
+                }
             },
 
             // triggers an action for the current user. If the operation was successful it calls the successCallback and passes the notification to show as parameter or undefined if there aren't any.
