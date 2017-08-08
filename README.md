@@ -6,7 +6,7 @@ A Polymer 2.0 component can be found in the branch "polymer2.0".
 
 Requirements
 ----------
-Make sure node.js, polymer 2.0 and bower are installed.
+Make sure node.js, polymer and bower are installed.
 
 Use Web Component
 ----------
