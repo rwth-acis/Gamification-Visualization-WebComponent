@@ -20,12 +20,11 @@
 
         <h3>Current Quests</h3>
         <table id="quests">
+            You are not logged in.
         </table>
 
         <!-- Reload widget when an action was triggered -->
         <iron-signals on-iron-signal-actionTriggered="loadData"></iron-signals>
-
-        <paper-toast id="errorMessage"></paper-toast>
     </template>
     <script>
         Polymer({
@@ -133,16 +132,8 @@
 
             // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
             errorMessage: function(errorObj) {
-                if(errorObj == 401) {
-                    if(this._loginErrorShown != true) {
-                        this.$$('#errorMessage').setAttribute('text', 'You are not logged in. Log in to use the gamification.');
-                        this.$$('#errorMessage').open();
-                        this._loginErrorShown = true;
-                    }
-                }
-                else {
-                    this.$$('#errorMessage').setAttribute('text','An error occured with the gamification: ' + errorObj);
-                    this.$$('#errorMessage').open();
+                if(errorObj != 401) {
+                    alert('An error occured with the gamification: ' + errorObj);
                 }
             }
         });
