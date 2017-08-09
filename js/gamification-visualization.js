@@ -172,7 +172,7 @@ Polymer({
 
         //Leaderboard
         this.getLocalLeaderboard(this.gameid, this.memberid, function (res) {
-            self.$$("#leaderboard").innerHTML = "";
+            self.$$("#leaderboard").innerHTML = '<tr><th>Rank</th><th>User</th><th id="leaderboardPointUnitName"></th></tr>';
             for(let i=0; i<res.rows.length; i++)
             {
                 let tr = document.createElement('tr');
