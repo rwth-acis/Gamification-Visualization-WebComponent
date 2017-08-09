@@ -33,10 +33,15 @@ Polymer({
         var self = this;
         let timeout  = function () {
             if(self._memberIdSet) {
-                self.registerUser(function (res) { // register the user if he has never used the gamification before
-                    self.loadGamificationData(); // then load the frontend
-                    self.showFirstTab();
-                }, this.errorMessage);
+                if(self.memberid == "anonymous") {
+                    self.$$('#loadingInfo').innerHTML = "<p>Please log in to use the gamification.";
+                }
+                else {
+                    self.registerUser(function (res) { // register the user if he has never used the gamification before
+                        self.loadGamificationData(); // then load the frontend
+                        self.showFirstTab();
+                    }, this.errorMessage);
+                }
             }
             else {
                 setTimeout(timeout, 100);
