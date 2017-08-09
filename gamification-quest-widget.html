@@ -136,7 +136,7 @@
             // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
             errorMessage: function(errorObj) {
                 if(errorObj != 401) {
-                    alert('An error occured with the gamification: ' + errorObj);
+                    console.log('An error occured with the gamification: ' + errorObj);
                 }
             }
         });
