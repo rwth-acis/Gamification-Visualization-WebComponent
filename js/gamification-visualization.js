@@ -35,6 +35,7 @@ Polymer({
             if(self._memberIdSet) {
                 self.registerUser(function (res) { // register the user if he has never used the gamification before
                     self.loadGamificationData(); // then load the frontend
+                    self.showFirstTab();
                 }, this.errorMessage);
             }
             else {
@@ -74,13 +75,12 @@ Polymer({
                 var levInfo = "";
             }
             self.$$('#gamificationNextLevelInfo').innerHTML = levInfo;
-
-            self.showFirstTab();
         },this.errorMessage);
 
         // Badges tab
         this.getAllBadgesOfMember(function(res)
         {
+            self.$$("#badges").innerHTML = "";
             for(let i=0; i<res.length; i++)
             {
                 let badgeReprensentation = document.createElement('div');
@@ -105,6 +105,7 @@ Polymer({
 
         // Achievements tab
         this.getAllAchievementsOfMember(function (res) {
+            self.$$("#achievements").innerHTML = "";
             for(let i=0; i<res.length; i++)
             {
                 let div = document.createElement('div');
@@ -121,6 +122,7 @@ Polymer({
 
         // Quests tab
         this.getAllQuestWithStatusOfMember("REVEALED", function (res) {
+            self.$$("#quests").innerHTML = "";
             if(res != null)
             {
                 for(let i=0; i<res.length; i++) {
@@ -170,6 +172,7 @@ Polymer({
 
         //Leaderboard
         this.getLocalLeaderboard(this.gameid, this.memberid, function (res) {
+            self.$$("#leaderboard").innerHTML = "";
             for(let i=0; i<res.rows.length; i++)
             {
                 let tr = document.createElement('tr');
@@ -223,6 +226,7 @@ Polymer({
         if(tabID == '2')
         {
             this.fire('iron-signal', {name: 'gamification', data: "readIntroduction"});
+            this.loadGamificationData(); // reload visualization
         }
     },
 
