@@ -73,7 +73,7 @@
                             // Load quest progress
                             self.getOneQuestProgressOfMember(res[i].id, function (res, table) {
                                 for (let i = 0; i < res.actionArray.length; i++) {
-                                    if (res.actionArray[i].isCompleted) { // Only show uncompleted actions
+                                    if (!res.actionArray[i].isCompleted) { // Only show uncompleted actions
                                         let action = document.createElement('td');
                                         action.innerHTML = res.actionArray[i].action;
                                         action.innerHTML += " " + res.actionArray[i].times + "/" + res.actionArray[i].maxTimes;
