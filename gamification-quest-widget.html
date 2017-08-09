@@ -1,0 +1,56 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-signals/iron-signals.html">
+
+<dom-module id="gamification-quest-widget">
+    <template>
+        </style>
+        </style>
+
+        <h3>Current Quests</h3>
+        <table>
+            <tr>
+                <th>Become a Citizen</th>
+                <td>favorRequirement 5/10</td>
+                <td>deleteRequirement 4/10</td>
+            </tr>
+            <tr>
+                <th>Pressure from the govenor</th>
+                <td>favorRequirement 5/10</td>
+            </tr>
+        </table>
+
+        <!-- Reload widget when an action was triggered -->
+        <iron-signals on-iron-signal-actionTriggered="loadData"></iron-signals>
+    </template>
+    <script>
+        Polymer({
+            is: 'gamification-quest-widget',
+
+            properties: {
+                // The URL-Endpoint of the Gamification-Framework
+                backendurl: {
+                    type: String
+                },
+
+                // the id of the game to visualize
+                gameid:  {
+                    type: String
+                },
+
+                // the username of the current user to use for the api calls
+                memberid: {
+                    type: String
+                },
+
+                // The key of the access-token field in the local Storage
+                accesstokenkeyname: {
+                    type: String
+                }
+            },
+
+            loadData: function () {
+                
+            }
+        });
+    </script>
+</dom-module>
