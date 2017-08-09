@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-signals/iron-signals.html">
-<link rel="import" href="/bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="gamification-quest-widget">
     <template>
@@ -16,15 +15,18 @@
             td, th {
                 padding-right: 10px;
             }
+            p {
+                margin-top: 0;
+            }
         </style>
 
         <h3>Current Quests</h3>
-        <span id="errorMessage">You are not logged in.</span>
         <table id="quests">
         </table>
+        <p id="status">You are not logged in.</p>
 
         <!-- Reload widget when an action was triggered -->
-        <iron-signals on-iron-signal-actionTriggered="loadData"></iron-signals>
+        <iron-signals on-iron-signal-action-triggered="loadData"></iron-signals>
     </template>
     <script>
         Polymer({
@@ -63,7 +65,7 @@
                 this.getAllQuestWithStatusOfMember("REVEALED", function (res) {
                     if(res != null)
                     {
-                        self.$$('#errorMessage').innerHTML = "";
+                        self.$$('#status').innerHTML = '<a href="/users/me">details</a>';
                         self.$$('#quests').innerHTML = "";
                         for(let i=0; i<res.length; i++) {
                             let tableRow = document.createElement('tr');
