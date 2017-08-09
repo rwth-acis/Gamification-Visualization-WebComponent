@@ -76,7 +76,7 @@
                         }
 
                         // Fire signal to reload visualization when action is triggered
-                        self.fire('iron-signal', {name: 'actionTriggered', data: action});
+                        self.fire('iron-signal', {name: 'action-triggered', data: action});
                     }, function () {
                         alert("Error triggering action");
                     });
