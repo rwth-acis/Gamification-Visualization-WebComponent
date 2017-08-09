@@ -53,6 +53,7 @@
 
             ready: function() {
                 this._accessToken = localStorage.getItem(this.accesstokenkeyname);
+                this.loadData();
             },
 
             // loads the quests and builds the DOM
@@ -88,13 +89,6 @@
                         self.$$('#quests').innerHTML = "Currently no quests.";
                     }
                 }, this.errorMessage);
-            },
-
-            // Entry point, load data when the currentUser is loaded and the memberId passed to this component
-            _memberIdChanged: function (e) {
-                if(this.memberid != undefined) {
-                    this.loadData();
-                }
             },
 
             //----------------------
