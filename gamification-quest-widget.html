@@ -19,15 +19,6 @@
 
         <h3>Current Quests</h3>
         <table id="quests">
-            <tr>
-                <th>Become a Citizen</th>
-                <td>favorRequirement 5/10</td>
-                <td>deleteRequirement 4/10</td>
-            </tr>
-            <tr>
-                <th>Pressure from the govenor</th>
-                <td>favorRequirement 5/10</td>
-            </tr>
         </table>
 
         <!-- Reload widget when an action was triggered -->
@@ -58,6 +49,10 @@
                 accesstokenkeyname: {
                     type: String
                 }
+            },
+
+            ready: function() {
+                this._accessToken = localStorage.getItem(this.accesstokenkeyname);
             },
 
             // loads the quests and builds the DOM
