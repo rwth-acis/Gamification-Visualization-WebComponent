@@ -3,11 +3,22 @@
 
 <dom-module id="gamification-quest-widget">
     <template>
-        </style>
+        <style>
+            table {
+                text-align: left;
+            }
+
+            h3 {
+                margin-bottom: 0;
+            }
+
+            td, th {
+                padding-right: 10px;
+            }
         </style>
 
         <h3>Current Quests</h3>
-        <table>
+        <table id="quests">
             <tr>
                 <th>Become a Citizen</th>
                 <td>favorRequirement 5/10</td>
@@ -39,7 +50,8 @@
 
                 // the username of the current user to use for the api calls
                 memberid: {
-                    type: String
+                    type: String,
+                    observer: '_memberIdChanged'
                 },
 
                 // The key of the access-token field in the local Storage
@@ -48,8 +60,97 @@
                 }
             },
 
+            // loads the quests and builds the DOM
             loadData: function () {
-                
+                var self = this;
+                this.getAllQuestWithStatusOfMember("REVEALED", function (res) {
+                    if(res != null)
+                    {
+                        self.$$('#quests').innerHTML = "";
+                        for(let i=0; i<res.length; i++) {
+                            let tableRow = document.createElement('tr');
+
+                            // Quest Title
+                            let questTitle = document.createElement('th');
+                            questTitle.innerHTML = res[i].name;
+                            tableRow.appendChild(questTitle);
+
+                            // Load quest progress
+                            self.getOneQuestProgressOfMember(res[i].id, function (res, table) {
+                                for (let i = 0; i < res.actionArray.length; i++) {
+                                    if (res.actionArray[i].isCompleted) { // Only show uncompleted actions
+                                        let action = document.createElement('td');
+                                        action.innerHTML = res.actionArray[i].action;
+                                        action.innerHTML += " " + res.actionArray[i].times + "/" + res.actionArray[i].maxTimes;
+                                        tableRow.appendChild(action);
+                                    }
+                                }
+                            }, self.errorMessage);
+                            self.$$('#quests').appendChild(tableRow);
+                        }
+                    }
+                    else {
+                        self.$$('#quests').innerHTML = "Currently no quests.";
+                    }
+                }, this.errorMessage);
+            },
+
+            // Entry point, load data when the currentUser is loaded and the memberId passed to this component
+            _memberIdChanged: function (e) {
+                if(this.memberid != undefined) {
+                    this.loadData();
+                }
+            },
+
+            //----------------------
+            //       Framework
+            //----------------------
+
+            getAllQuestWithStatusOfMember: function(questStatus, successCallback, errorCallback)
+            {
+                var endPointURL = "visualization/quests/"+this.gameid+"/"+this.memberid+"/status/"+questStatus;
+                return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
+            },
+
+            getOneQuestProgressOfMember: function(questId, successCallback, errorCallback)
+            {
+                var endPointURL = "visualization/quests/"+this.gameid+"/"+this.memberid+"/progress/"+questId;
+                return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
+            },
+
+            // Performs the in endPointURL specified get-Request, parses the response JSON and calls either the successCallback-function or the errorCallback.
+            sendRequestJsonResponse: function(endPointURL, successCallback, errorCallback)
+            {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Typical action to be performed when the document is ready:
+                        var json = JSON.parse(xhttp.responseText);
+                        successCallback(json);
+                    }
+                    else if(this.readyState == 4)
+                    {
+                        console.log("Error performing get request:");
+                        console.log("Staus: " + this.status);
+                        errorCallback(this.status);
+                    }
+                };
+                xhttp.open("GET", this.backendurl + endPointURL, true);
+                xhttp.setRequestHeader('access_token', this._accessToken);
+                xhttp.send();
+            },
+
+            // Displays an error message. Used as error-callback-function for the requests to the gamification framework.
+            errorMessage: function(errorObj) {
+                if(errorObj == 401) {
+                    if(this._loginErrorShown != true) {
+                        alert('You are not logged in. Log in to use the gamification.');
+                        this._loginErrorShown = true;
+                    }
+                }
+                else {
+                    alert('An error occured with the gamification: ' + errorObj);
+                }
             }
         });
     </script>
