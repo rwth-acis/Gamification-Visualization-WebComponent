@@ -19,8 +19,8 @@
         </style>
 
         <h3>Current Quests</h3>
+        <span id="errorMessage">You are not logged in.</span>
         <table id="quests">
-            You are not logged in.
         </table>
 
         <!-- Reload widget when an action was triggered -->
@@ -63,6 +63,7 @@
                 this.getAllQuestWithStatusOfMember("REVEALED", function (res) {
                     if(res != null)
                     {
+                        self.$$('#errorMessage').innerHTML = "";
                         self.$$('#quests').innerHTML = "";
                         for(let i=0; i<res.length; i++) {
                             let tableRow = document.createElement('tr');
