@@ -50,15 +50,24 @@
             processActionTringgerEvent: function (e) {
                 if(this.memberid != "anonymous")
                 {
+                    let action = e.detail;
+
+                    // only allow one login action - prevent constantly logging in and of for getting points
+                    if(action == "login") {
+                        if(this._hasLoggedInBefore) {
+                            return;
+                        }
+                        this._hasLoggedInBefore = true;
+                    }
+
+                    // Trigger action and show notifications
                     var self = this;
-                    this.triggerAction(e.detail, function (notificationResponse) {
-                        console.log(notificationResponse);
+                    this.triggerAction(action, function (notificationResponse) {
                         if (notificationResponse != undefined) //there are notifications to show
                         {
                             let notificationMessage = "";
 
                             for (let i = 0; i < notificationResponse.length; i++) {
-                                console.log(notificationResponse[i]);
                                 notificationMessage = notificationMessage + " " + notificationResponse[i].message;
                             }
 
