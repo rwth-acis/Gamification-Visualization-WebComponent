@@ -1,5 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-signals/iron-signals.html">
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="gamification-quest-widget">
     <template>
@@ -23,6 +24,8 @@
 
         <!-- Reload widget when an action was triggered -->
         <iron-signals on-iron-signal-actionTriggered="loadData"></iron-signals>
+
+        <paper-toast id="errorMessage"></paper-toast>
     </template>
     <script>
         Polymer({
@@ -41,8 +44,7 @@
 
                 // the username of the current user to use for the api calls
                 memberid: {
-                    type: String,
-                    observer: '_memberIdChanged'
+                    type: String
                 },
 
                 // The key of the access-token field in the local Storage
@@ -133,12 +135,14 @@
             errorMessage: function(errorObj) {
                 if(errorObj == 401) {
                     if(this._loginErrorShown != true) {
-                        alert('You are not logged in. Log in to use the gamification.');
+                        this.$$('#errorMessage').setAttribute('text', 'You are not logged in. Log in to use the gamification.');
+                        this.$$('#errorMessage').open();
                         this._loginErrorShown = true;
                     }
                 }
                 else {
-                    alert('An error occured with the gamification: ' + errorObj);
+                    this.$$('#errorMessage').setAttribute('text','An error occured with the gamification: ' + errorObj);
+                    this.$$('#errorMessage').open();
                 }
             }
         });
