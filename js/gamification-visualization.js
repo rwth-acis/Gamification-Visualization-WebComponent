@@ -199,6 +199,11 @@ Polymer({
 
     _memberidChanged: function(newValue, oldValue) {
         this._memberIdSet = true;
+
+        // fix page change bug
+        if(newValue == "anonymous" || newValue == "MaxMustermann1") {
+            this.memberid = oldValue;
+        }
     },
 
     // Shows the first tab after data was loaded
