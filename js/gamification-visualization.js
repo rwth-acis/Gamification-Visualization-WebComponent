@@ -204,6 +204,9 @@ Polymer({
         if(newValue == "anonymous" || newValue == "MaxMustermann1") {
             this.memberid = oldValue;
         }
+        else {
+            this.$$('#loadingInfo').innerHTML = '<p>Please log in to use the gamification</p>';
+        }
     },
 
     // Shows the first tab after data was loaded
