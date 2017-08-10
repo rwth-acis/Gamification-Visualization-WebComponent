@@ -334,12 +334,12 @@ Polymer({
     errorMessage: function(errorObj) {
         if(errorObj == 401) {
             if(this._loginErrorShown != true) {
-                alert('You are not logged in. Log in to use the gamification.');
+                console.log('You are not logged in. Log in to use the gamification.');
                 this._loginErrorShown = true;
             }
         }
         else {
-            alert('An error occured with the gamification: ' + errorObj);
+            console.log('An error occured with the gamification: ' + errorObj);
         }
     },
 
