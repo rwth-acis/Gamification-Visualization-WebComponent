@@ -1,4 +1,5 @@
-<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-signals/iron-signals.html">
 
 <dom-module id="gamification-visualization">
 
@@ -54,10 +55,10 @@
                 </tr>
             </table>
         </div>
-    </template>
 
-    <!-- Reload Visualization when an action was triggered -->
-    <iron-signals on-iron-signal-action-triggered="loadGamificationData"></iron-signals>
+        <!-- Reload Visualization when an action was triggered -->
+        <iron-signals on-iron-signal-action-triggered="loadGamificationData"></iron-signals>
+    </template>
     <script src="js/gamification-visualization.js"></script>
 
 </dom-module>
