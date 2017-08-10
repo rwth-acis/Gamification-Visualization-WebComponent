@@ -1,0 +1,226 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="gamification-manager">
+    <template>
+        <style>
+            input, select {
+                display: block;
+                clear: both;
+                margin-bottom: 10px;
+            }
+        </style>
+
+        <h1>Manage Gamification</h1>
+
+        <h2>Create new Quest</h2>
+        <div>
+            <label>Quest ID</label><input id="questid" type="text" value="tolleQuest" />
+            <label>Quest Name</label><input id="questname" type="text" value="Tolle Quest" />
+            <label>Quest Description</label><input id="questdescription" type="text" value="Beschreibung einer tollen Quest" />
+            <label>Quest minimal Level</label>
+            <select id="questlevel">
+                <option value="10">Citizen</option>
+                <option value="200">Regular Customer</option>
+                <option value="500">Quality Checker</option>
+                <option value="1000">Business Manager</option>
+                <option value="2500">Chief Officer</option>
+            </select>
+            <label>Achievement Text</label><input id="achievementdescription" type="text" value="Sie haben eine tolle Quest Absolviert" />
+            <label>Achievement Notification Message</label><input id="achievementnotifmessage" type="text" value="Notifikation"/>
+
+            <h3>Actions</h3>
+            <label>Create Requirement</label>
+            <input id="createRequirement" type="number" value="3" min="0" />
+            <label>Comment Requirement</label>
+            <input id="commentRequirement" type="number" value="2" min="0" />
+            <label>Favor Requirement</label>
+            <input id="favorRequirement" type="number" value="1" min="0" />
+            <label>Login</label>
+            <input id="login" type="number" value="0" min="0" />
+            <label>Use the activity tracker</label>
+            <input id="useActivityTracker" type="number" value="0" min="0" />
+
+            <button on-click="submitNewQuest">Create</button>
+
+            <p id="response"></p>
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'gamification-Manager',
+
+            properties: {
+                // The URL-Endpoint of the Gamification-Framework
+                backendurl: {
+                    type: String
+                },
+
+                // the id of the game to visualize
+                gameid:  {
+                    type: String
+                },
+
+                // the username of the current user to use for the api calls
+                memberid: {
+                    type: String
+                },
+
+                // The key of the access-token field in the local Storage
+                accesstokenkeyname: {
+                    type: String
+                }
+            },
+
+            ready: function () {
+                localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMjM4MTE2MCwiaWF0IjoxNTAyMzc3NTYwLCJqdGkiOiIzYTcyNTNkMS0zZWY0LTRkYWItYTVhYS1mOGNmYzkxOTkxMGEifQ.R0p2lpbx86150TtiKLStql36QgMyHdPUQDTWtmUbb2PvAsxY2vRIYDhgxLe8TpD1euD00AqiI9ucFZLf34z3VWes8aOO00y95OfevKzQLahyzU_RFcGpxZIroemNn7hXsDOOcJkveIWauS813Tg_pbEJF0PSKJvdDfdc40rAsoY");
+                this._accessToken = localStorage.getItem(this.accesstokenkeyname);
+            },
+
+            // Handles the create button event and pushes a new quest and achievement to the backend
+            submitNewQuest: function () {
+
+                let questid = this.$$('#questid').value;
+                let questname = this.$$('#questname').value;
+                let questdescription = this.$$('#questdescription').value;
+                let questpointvalue = this.$$('#questlevel').value;
+
+                let achievementid = 'ach' + questid;
+                let achievementdescription = this.$$('#achievementdescription').value;
+                let achievementnotifmessage = this.$$('#achievementnotifmessage').value;
+
+                let createRequirement = this.$$('#createRequirement').value;
+                let commentRequirement = this.$$('#commentRequirement').value;
+                let favorRequirement = this.$$('#favorRequirement').value;
+                let login = this.$$('#login').value;
+                let useActivityTracker = this.$$('#useActivityTracker').value;
+
+                // reset inputs
+                this.$$('#response').innerHTML = "";
+                this.$$('#questid').value = "";
+                this.$$('#questname').value = "";
+                this.$$('#questdescription').value = "";
+                this.$$('#achievementdescription').value = "";
+                this.$$('#achievementnotifmessage').value = "";
+                this.$$('#createRequirement').value = "0";
+                this.$$('#favorRequirement').value = "0";
+                this.$$('#login').value = "0";
+                this.$$('#useActivityTracker').value = "0";
+
+                // Catch some errors, all other errors will be catched by the gamification backend
+                if(questid == "") {
+                    this.$$('#response').innerHTML = "The quest id cannot be empty.";
+                    return;
+                }
+                if ((createRequirement == 0) && (commentRequirement == 0) && (favorRequirement == 0) && (login == 0) && (useActivityTracker == 0)) {
+                    this.$$('#response').innerHTML = "You need at least one action.";
+                    return;
+                }
+
+                var self = this;
+                var callback = function (result) {
+                    self.$$('#response').innerHTML += result.message + "<br />";
+                };
+                this.createAchievement(achievementid, questname, achievementdescription, achievementnotifmessage, function (result) {
+                    callback(result);
+                    self.createQuest(questid, questname, questdescription, achievementid, questpointvalue, createRequirement, commentRequirement, favorRequirement, login, useActivityTracker, callback, callback);
+                }, callback);
+            },
+
+            // creates a new achievement in the gamification backend
+            createAchievement: function (id, name, description, notifMessage, successCallback, errorCallback) {
+                var XHR = new XMLHttpRequest();
+
+                var FD  = new FormData();
+                FD.append("achievementid", id);
+                FD.append("achievementname", name);
+                FD.append("achievementdesc", description);
+                FD.append("achievementpointvalue", '10');
+                FD.append("achievementbadgeid", '');
+                FD.append("achievementnotificationcheck", 't');
+                FD.append("achievementnotificationmessage", notifMessage);
+
+                XHR.addEventListener('load', function(event) {
+                    if (XHR.status >= 200 && XHR.status < 300) {
+                        let json = JSON.parse(XHR.responseText);
+                        console.log(json);
+                        successCallback(json);
+                    }
+                    else {
+                        let json = JSON.parse(XHR.responseText);
+                        console.log(json);
+                        errorCallback(json);
+                    }
+                });
+                XHR.addEventListener('error', function(event) {
+                    let json = JSON.parse(XHR.responseText);
+                    console.log(json);
+                    errorCallback(json);
+                });
+                XHR.open('POST', this.backendurl + 'gamification/achievements/' + this.gameid);
+                XHR.setRequestHeader("access_token", this._accessToken);
+                XHR.send(FD);
+            },
+
+            // creates a new quest in the gamification backend
+            createQuest: function (id, name, description, achievement, minpoints, createRequirement, commentRequirement, favorRequirement, login, useActivityTracker, successCallback, errorCallback) {
+                console.log("Quest");
+                console.log(id);
+                console.log(name);
+                console.log(description);
+                console.log(achievement);
+                console.log(minpoints);
+
+                let parameters = {
+                    "questid": id,
+                    "questname": name,
+                    "queststatus": "HIDDEN",
+                    "questachievementid": achievement,
+                    "questquestflag": false,
+                    "questpointflag": true,
+                    "questidcompleted": "",
+                    "questpointvalue": parseInt(minpoints),
+                    "questactionids": [],
+                    "questdescription": description,
+                    "questnotificationcheck": false,
+                    "questnotificationmessage": ""
+                };
+
+                if(createRequirement > 0) {
+                    parameters.questactionids.push({"action": "createRequirement", "times": parseInt(createRequirement)});
+                }
+                if(commentRequirement > 0) {
+                    parameters.questactionids.push({"action": "commentRequirement", "times": parseInt(commentRequirement)});
+                }
+                if(favorRequirement > 0) {
+                    parameters.questactionids.push({"action": "favorRequirement", "times": parseInt(favorRequirement)});
+                }
+                if(login > 0) {
+                    parameters.questactionids.push({"action": "login", "times": parseInt(login)});
+                }
+                if(useActivityTracker > 0) {
+                    parameters.questactionids.push({"action": "useActivityTracker", "times": parseInt(useActivityTracker)});
+                }
+                console.log(parameters);
+
+                var request = new XMLHttpRequest();
+                request.open("POST", this.backendurl + "gamification/quests/" + this.gameid);
+                request.setRequestHeader("access_token", this._accessToken);
+                request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                request.addEventListener('load', function(event) {
+                    if (request.status >= 200 && request.status < 300)
+                    {
+                        let json = JSON.parse(request.responseText);
+                        successCallback(json);
+                    }
+                    else
+                    {
+                        let json = JSON.parse(request.responseText);
+                        errorCallback(json);
+                    }
+                });
+                request.send(JSON.stringify(parameters));
+            }
+        });
+    </script>
+</dom-module>
