@@ -231,7 +231,6 @@ Polymer({
         if(tabID == '2')
         {
             this.fire('iron-signal', {name: 'gamification', data: "readIntroduction"});
-            this.loadGamificationData(); // reload visualization
         }
     },
 

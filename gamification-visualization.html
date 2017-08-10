@@ -21,8 +21,8 @@
             <div><p><span class="fieldTitle">Rank:</span> <span id="gamificationRank">...</span></p></div>
         </div>
         <div id="gamificationTab2" class="gamificationTab">
+            <img src="img/trongsa.png" width="500" />
             <h1>Introduction</h1>
-            <img src="img/bazaar.jpg" width="250" class="left"/>
             <p>The city Trongsa has developed into a shining eastern metropolis in the past centuries. Here live 400.000 people with many different social backgrounds. The flourishing economy of the city is concentrated on the bazaar in the south district. The bazaar is not only an essential trading place but also an important social meeting point where citizens of the city meet and organize themselves<br /><br /></p>
             <img src="img/stadthalter.png" width="200" class="right"/>
             <p>The city is ruled by the governor Kasib Hamzah. He is power addicted and rules the city with strict hand. The bazaar is a thorn in the flesh. It is the only instance that keeps his power within limits.</p>
@@ -56,6 +56,8 @@
         </div>
     </template>
 
+    <!-- Reload Visualization when an action was triggered -->
+    <iron-signals on-iron-signal-action-triggered="loadGamificationData"></iron-signals>
     <script src="js/gamification-visualization.js"></script>
 
 </dom-module>
