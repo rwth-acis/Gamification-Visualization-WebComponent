@@ -18,9 +18,11 @@
 
         <h2>Create new Quest</h2>
         <div>
-            <label>Quest ID</label><input id="questid" type="text" value="tolleQuest" />
-            <label>Quest Name</label><input id="questname" type="text" value="Tolle Quest" />
-            <label>Quest Description</label><input id="questdescription" type="text" value="Beschreibung einer tollen Quest" />
+            <p id="response"></p>
+
+            <label>Quest ID</label><input id="questid" type="text" />
+            <label>Quest Name</label><input id="questname" type="text" />
+            <label>Quest Description</label><input id="questdescription" type="text" />
             <label>Quest minimal Level</label>
             <select id="questlevel">
                 <option value="10">Citizen</option>
@@ -29,24 +31,22 @@
                 <option value="1000">Business Manager</option>
                 <option value="2500">Chief Officer</option>
             </select>
-            <label>Achievement Text</label><input id="achievementdescription" type="text" value="Sie haben eine tolle Quest Absolviert" />
-            <label>Achievement Notification Message</label><input id="achievementnotifmessage" type="text" value="Notifikation"/>
+            <label>Achievement Text</label><input id="achievementdescription" type="text" />
+            <label>Achievement Notification Message</label><input id="achievementnotifmessage" type="text" />
 
             <h3>Actions</h3>
             <label>Create Requirement</label>
-            <input id="createRequirement" type="number" value="3" min="0" />
+            <input id="createRequirement" type="number" value="0" min="0" />
             <label>Comment Requirement</label>
-            <input id="commentRequirement" type="number" value="2" min="0" />
+            <input id="commentRequirement" type="number" value="0" min="0" />
             <label>Favor Requirement</label>
-            <input id="favorRequirement" type="number" value="1" min="0" />
+            <input id="favorRequirement" type="number" value="0" min="0" />
             <label>Login</label>
             <input id="login" type="number" value="0" min="0" />
             <label>Use the activity tracker</label>
             <input id="useActivityTracker" type="number" value="0" min="0" />
 
             <button on-click="submitNewQuest">Create</button>
-
-            <p id="response"></p>
         </div>
 
     </template>
