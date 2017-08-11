@@ -12,6 +12,10 @@
 
         <h1>Manage Gamification</h1>
 
+        <h2>Quests</h2>
+        <table id="questsList">
+        </table>
+
         <h2>Create new Quest</h2>
         <div>
             <label>Quest ID</label><input id="questid" type="text" value="tolleQuest" />
@@ -72,9 +76,47 @@
                 }
             },
 
+            // Called when the component is created and initialized
             ready: function () {
-                localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMjM4MTE2MCwiaWF0IjoxNTAyMzc3NTYwLCJqdGkiOiIzYTcyNTNkMS0zZWY0LTRkYWItYTVhYS1mOGNmYzkxOTkxMGEifQ.R0p2lpbx86150TtiKLStql36QgMyHdPUQDTWtmUbb2PvAsxY2vRIYDhgxLe8TpD1euD00AqiI9ucFZLf34z3VWes8aOO00y95OfevKzQLahyzU_RFcGpxZIroemNn7hXsDOOcJkveIWauS813Tg_pbEJF0PSKJvdDfdc40rAsoY");
+                localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMjQ0Njg0OSwiaWF0IjoxNTAyNDQzMjQ5LCJqdGkiOiIzNjM0Mjc2ZS02ZDE1LTQwNDAtYTlhZi0wOWU2OTFlOTVlYjgifQ.Ub1A_deYLJwDkxiPamZUIioWTF-AJ2QSCwzNefXIB9P43RCiv_4bLSWicl-akpLl_rsGgzL-AMzR3jKIWvaYUIRXskuQtXVVkQk628daM_FhrfDLArzqJh1cMW-ZkyaUYyWBImko7uWUw19PAwz77T681k4pkw1k22v516uZMqw");
                 this._accessToken = localStorage.getItem(this.accesstokenkeyname);
+
+                this.loadQuestList();
+            },
+
+            // Fetches the quest from the gamification backend and displays them
+            loadQuestList() {
+                this.$$('#questsList').innerHTML = "";
+                var self = this;
+                this.getQuests(function (result) {
+                    for(let i=0; i<result.rows.length; i++) {
+                        let tr = document.createElement('tr');
+                        let tdName = document.createElement('td');
+                        let tdDelete = document.createElement('td');
+                        let deleteButton = document.createElement('button');
+
+                        tdName.innerHTML = result.rows[i].name;
+                        deleteButton.innerHTML = "Delete";
+                        deleteButton.setAttribute("data-quest", result.rows[i].id);
+                        deleteButton.setAttribute("data-achievement", result.rows[i].achievementId);
+                        deleteButton.onclick = function (e) {
+                            let questId = e.target.getAttribute('data-quest');
+                            let achievementId = e.target.getAttribute('data-achievement');
+
+                            if(confirm("Do you want to delete the quest " + questId + "?")) {
+                                let callback = function () {
+                                    self.loadQuestList();
+                                };
+                                self.deleteAchievementAndQuests(achievementId, callback, callback);
+                            }
+                        };
+
+                        tdDelete.appendChild(deleteButton);
+                        tr.appendChild(tdName);
+                        tr.appendChild(tdDelete);
+                        self.$$('#questsList').appendChild(tr);
+                    }
+                }, console.log);
             },
 
             // Handles the create button event and pushes a new quest and achievement to the backend
@@ -120,11 +162,74 @@
                 var self = this;
                 var callback = function (result) {
                     self.$$('#response').innerHTML += result.message + "<br />";
+                    self.loadQuestList();
+                };
+                var deleteAchievementCallback = function (result) {
+                    self.deleteAchievementAndQuests(achievementid, callback, callback);
                 };
                 this.createAchievement(achievementid, questname, achievementdescription, achievementnotifmessage, function (result) {
                     callback(result);
-                    self.createQuest(questid, questname, questdescription, achievementid, questpointvalue, createRequirement, commentRequirement, favorRequirement, login, useActivityTracker, callback, callback);
+                    self.createQuest(questid, questname, questdescription, achievementid, questpointvalue, createRequirement, commentRequirement, favorRequirement, login, useActivityTracker, callback, deleteAchievementCallback);
                 }, callback);
+            },
+
+            //----------------------
+            //       Framework
+            //----------------------
+
+            // Performs the in endPointURL specified get-Request, parses the response JSON and calls either the successCallback-function or the errorCallback.
+            sendRequestJsonResponse: function(endPointURL, successCallback, errorCallback)
+            {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Typical action to be performed when the document is ready:
+                        var json = JSON.parse(xhttp.responseText);
+                        successCallback(json);
+                    }
+                    else if(this.readyState == 4)
+                    {
+                        if(this.status == 401) {
+                            alert('You are not logged in.');
+                        }
+                        else {
+                            console.log("Error performing get request:");
+                            console.log("Status: " + this.status);
+                            errorCallback(this.status);
+                        }
+                    }
+                };
+                xhttp.open("GET", this.backendurl + endPointURL, true);
+                xhttp.setRequestHeader('access_token', this._accessToken);
+                xhttp.send();
+            },
+
+            deleteAchievementAndQuests(achievementId, successCallback, errorCallback) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Typical action to be performed when the document is ready:
+                        var json = JSON.parse(xhttp.responseText);
+                        console.log(json);
+                        successCallback(json);
+                    }
+                    else if(this.readyState == 4)
+                    {
+                        console.log("Error deleting achievement and quests:");
+                        console.log("Staus: " + this.status);
+                        errorCallback(this.status);
+                    }
+                };
+                xhttp.open("DELETE", this.backendurl + "gamification/achievements/reqbaz/" + achievementId, true);
+                xhttp.setRequestHeader('access_token', this._accessToken);
+                xhttp.send();
+            },
+
+            // gets all Quests of the gamification
+            getQuests: function(successCallback, errorCallback)
+            {
+                var endPointURL = "gamification/quests/" + this.gameid + "?current=1&rowCount=100&searchPhrase";
+                return this.sendRequestJsonResponse(endPointURL,successCallback, errorCallback);
             },
 
             // creates a new achievement in the gamification backend
