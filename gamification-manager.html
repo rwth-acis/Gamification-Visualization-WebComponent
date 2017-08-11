@@ -65,11 +65,6 @@
                     type: String
                 },
 
-                // the username of the current user to use for the api calls
-                memberid: {
-                    type: String
-                },
-
                 // The key of the access-token field in the local Storage
                 accesstokenkeyname: {
                     type: String
@@ -78,7 +73,6 @@
 
             // Called when the component is created and initialized
             ready: function () {
-                localStorage.setItem(this.accesstokenkeyname, "eyJhbGciOiJSUzI1NiJ9.eyJhdWQiOlsiYzc1ODhlZmMtZjgzMS00ZTMxLTkyOGUtMGY0NmE5MWZiMzExIl0sImlzcyI6Imh0dHBzOlwvXC9hcGkubGVhcm5pbmctbGF5ZXJzLmV1XC9vXC9vYXV0aDJcLyIsImV4cCI6MTUwMjQ0Njg0OSwiaWF0IjoxNTAyNDQzMjQ5LCJqdGkiOiIzNjM0Mjc2ZS02ZDE1LTQwNDAtYTlhZi0wOWU2OTFlOTVlYjgifQ.Ub1A_deYLJwDkxiPamZUIioWTF-AJ2QSCwzNefXIB9P43RCiv_4bLSWicl-akpLl_rsGgzL-AMzR3jKIWvaYUIRXskuQtXVVkQk628daM_FhrfDLArzqJh1cMW-ZkyaUYyWBImko7uWUw19PAwz77T681k4pkw1k22v516uZMqw");
                 this._accessToken = localStorage.getItem(this.accesstokenkeyname);
 
                 this.loadQuestList();
