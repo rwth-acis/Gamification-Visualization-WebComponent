@@ -11,10 +11,10 @@ Use Web Component
 ----------
 Import the Component in your sourcecode and add the following DOM-element:
 ```
-<gamification-action-trigger backendurl="http://137.226.58.16:8086/"
-                                gameid="testspiel"
-                                accesstokenkeyname="openidconnect-signin-token">
-</gamification-action-trigger>
+<gamification-manager backendurl="http://137.226.58.16:8086/"
+                      gameid="testspiel"
+                      accesstokenkeyname="openidconnect-signin-token">
+</gamification-manager>
 ```
 
 The attribute "backendurl" should contain the url of your Gamification-Framework backend server.
